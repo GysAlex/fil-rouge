@@ -1,0 +1,53 @@
+
+
+#frontend ignore
+# Logs
+frontend-fil-rouge/logs
+frontend-fil-rouge/*.log
+frontend-fil-rouge/npm-debug.log*
+frontend-fil-rouge/yarn-debug.log*
+frontend-fil-rouge/yarn-error.log*
+frontend-fil-rouge/pnpm-debug.log*
+frontend-fil-rouge/lerna-debug.log*
+
+frontend-fil-rouge/node_modules
+frontend-fil-rouge/dist
+frontend-fil-rouge/dist-ssr
+frontend-fil-rouge/*.local
+
+# Editor directories and files
+frontend-fil-rouge/.vscode/*
+frontend-fil-rouge/!.vscode/extensions.json
+frontend-fil-rouge/.idea
+frontend-fil-rouge/.DS_Store
+frontend-fil-rouge/*.suo
+frontend-fil-rouge/*.ntvs*
+frontend-fil-rouge/*.njsproj
+frontend-fil-rouge/*.sln
+frontend-fil-rouge/*.sw?
+
+#backend ignore
+
+backend-fil-rouge/.phpunit.cache
+backend-fil-rouge/node_modules
+backend-fil-rouge/public/build
+backend-fil-rouge/public/hot
+backend-fil-rouge/public/storage
+backend-fil-rouge/storage/*.key
+backend-fil-rouge/storage/pail
+backend-fil-rouge/vendor
+backend-fil-rouge/.env
+backend-fil-rouge/.env.backup
+backend-fil-rouge/.env.production
+backend-fil-rouge/.phpactor.json
+backend-fil-rouge/.phpunit.result.cache
+backend-fil-rouge/Homestead.json
+backend-fil-rouge/Homestead.yaml
+backend-fil-rouge/npm-debug.log
+backend-fil-rouge/yarn-error.log
+backend-fil-rouge/auth.json
+backend-fil-rouge/.fleet
+backend-fil-rouge/.idea
+backend-fil-rouge/.nova
+backend-fil-rouge/.vscode
+backend-fil-rouge/.zed
