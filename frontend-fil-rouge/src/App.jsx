@@ -2,6 +2,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import './tail.css'
 import { Main } from './containers/Main'
 import { Detail } from './pages/Detail'
+import { Resultatrecherche } from './pages/Resultatrecherche'
 
 const router = createBrowserRouter([
 	{
@@ -21,8 +22,14 @@ const router = createBrowserRouter([
 				path: "/owner",
 				element: <div>This is the owner page</div>
 			},
+			{
+				path:"/resultatrecherche",
+				element: <Resultatrecherche/>
+			},
 		]
 	}
+
+	
 ])
 
 function App() {
