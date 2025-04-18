@@ -25,3 +25,58 @@
 	background-position-x: 94%;
 	background-color: var(--light-green);
 }
+
+.line::after
+{
+	content: '';
+	position: absolute;
+	width: 10px;
+	height: 10px;
+	background-color: #28B446;
+	border-radius: 50%;
+	right: -5px;
+	top: 50%;
+}
+
+/* I was sure that this kevin powell tips will be usesull for me ! */
+.commentText
+{
+	display: -webkit-box;
+	-webkit-line-clamp: 4;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+}
+
+.scroller
+{
+	transition: all ease .4s;
+}
+
+footer .up
+{
+	min-height: 300px;
+	background: linear-gradient(1turn, var(--primary-green) 85%, white 20%);
+}
+
+.homecard
+{
+	transition: all ease .4s;
+}
+
+.homecard:hover
+{
+	transform: translateY(-3px);
+	transform: scale(1.01);
+}
+
+.gr-image 
+{
+	display: grid;
+}
+
+@media (max-width: 1024px) {
+	.gr-image 
+	{
+		display: none !important;
+	}	
+}
