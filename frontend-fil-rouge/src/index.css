@@ -7,7 +7,9 @@
 :root
 {
 	--light-green: rgba(39, 174, 95, 0.41);
-	--primary-green: #28B446;
+	--primary-green: #28b446;
+	--home-bg: hsla(133, 64%, 43%, 0.60);
+	--search-shadow: hsla(133, 64%, 43%, 0.40);
 	--figma-grid: 30px;
 	--title-color: #263238;
 	--text-color: #455A64;
@@ -79,4 +81,126 @@ footer .up
 	{
 		display: none !important;
 	}	
+}
+
+.inside
+{
+	background: url('assets/2149649376.jpg') no-repeat;
+	background-position-x: center;
+	background-size: cover;
+	background-position-y: 40%;
+}
+
+.t-home
+{
+	letter-spacing: -4%;
+}
+
+
+
+select
+{
+	padding-inline: 15px;
+	border: solid 1px var(--primary-green);
+	padding-block: 15px;
+	transition: 0.4s;
+}
+
+
+select::picker-icon
+{
+	transition: all ease .4s;
+	color: var(--primary-green);
+}
+
+select:open::picker-icon {
+	rotate: 180deg;
+}
+
+.search input + label
+{
+	transition: all ease .4s;
+}
+
+
+.search input
+{
+	transition: all ease .3s;
+	background: url('assets/chevron-down-solid.svg') no-repeat;
+	background-size: 17px;
+	background-position-x: 95%;
+	background-position-y: center ;
+}
+
+.search input:focus, .search input:hover
+{
+	border: solid 2px #28b446;
+	outline: none;
+}
+
+.search input:hover + label
+{
+	user-select: none;
+	pointer-events: none;
+}
+
+.search input:hover + label, .search input:focus + label, .search input.hasVal + label
+{
+	transform: translate( -17px ,-40px);
+	scale: .8;
+	z-index: 1000;
+	background-color: #28B446;
+	color: white;
+	border-radius: 10px;
+	padding: 4px;
+}
+
+
+.search ul li
+{
+	transition: all ease .4s;
+	color: white;
+}
+
+.search ul li:hover
+{
+	background-color: #28B446;
+}
+
+
+.modal 
+{
+	display: none;
+	transition-behavior: allow-discrete;
+	transition-property: display opacity;
+	transition-duration: .4s;
+	background-color: rgba(0, 0, 0, .2);
+	opacity: 0;
+}
+
+.modal.show 
+{
+	opacity: 1;
+	display: flex;
+
+	@starting-style{
+		opacity: 0;
+	}
+}
+
+.modal form
+{
+	transition-behavior: allow-discrete;
+	transition-property: display opacity;
+	margin-top: 150px;
+	transition-duration: .4s;
+	transform: translateX(-20vw);	
+}
+
+.modal.show form
+{
+	transform: translateX(0);
+	@starting-style{
+		transform: translateX(20vh)
+	}
 }
