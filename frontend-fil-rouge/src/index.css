@@ -8,7 +8,8 @@
 {
 	--light-green: rgba(39, 174, 95, 0.41);
 	--primary-green: #28b446;
-	--home-bg: hsla(133, 64%, 43%, 0.60);
+	--home-bg: rgba(39, 180, 70, 0.6);
+	--profile-bg: rgba(39, 180, 70, 0.7);
 	--search-shadow: hsla(133, 64%, 43%, 0.40);
 	--figma-grid: 30px;
 	--title-color: #263238;
@@ -117,13 +118,13 @@ select:open::picker-icon {
 	rotate: 180deg;
 }
 
-.search input + label
+.search input + label, .searchModal input + label
 {
 	transition: all ease .4s;
 }
 
 
-.search input
+.search input, .searchModal input
 {
 	transition: all ease .3s;
 	background: url('assets/chevron-down-solid.svg') no-repeat;
@@ -132,19 +133,20 @@ select:open::picker-icon {
 	background-position-y: center ;
 }
 
-.search input:focus, .search input:hover
+.search input:focus, .search input:hover, .searchModal input:focus, .searchModal input:hover
 {
 	border: solid 2px #28b446;
 	outline: none;
 }
 
-.search input:hover + label
+.search input:hover + label, .searchModal input:hover + label
 {
 	user-select: none;
 	pointer-events: none;
 }
 
-.search input:hover + label, .search input:focus + label, .search input.hasVal + label
+.search input:hover + label, .search input:focus + label, .search input.hasVal + label,
+.searchModal input:hover + label, .searchModal input:focus + label, .searchModal input.hasVal + label
 {
 	transform: translate( -17px ,-40px);
 	scale: .8;
@@ -155,16 +157,30 @@ select:open::picker-icon {
 	padding: 4px;
 }
 
+.searchModal input:hover + label, .searchModal input:focus + label, .searchModal input.hasVal + label
+{
+	z-index: 30;
+}
 
-.search ul li
+.search ul li, .searchModal ul li
 {
 	transition: all ease .4s;
 	color: white;
 }
 
-.search ul li:hover
+.searchModal ul li
+{
+	color: #28B446;
+}
+
+.search ul li:hover, .searchModal ul li:hover
 {
 	background-color: #28B446;
+}
+
+.searchModal ul li:hover
+{
+	color: white;
 }
 
 
@@ -203,4 +219,17 @@ select:open::picker-icon {
 	@starting-style{
 		transform: translateX(20vh)
 	}
+}
+
+
+.sidebar
+{
+	height: calc(100dvh - 89px);
+	background-color: greenyellow;
+}
+
+.nextSide
+{
+	height: calc(100dvh - 89px);
+	overflow-y: auto;
 }
