@@ -2,6 +2,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import './tail.css'
 import { Main } from './containers/Main'
 import { Detail } from './pages/Detail'
+import { Home } from './pages/Home'
 
 const router = createBrowserRouter([
 	{
@@ -22,6 +23,10 @@ const router = createBrowserRouter([
 				element: <div>This is the owner page</div>
 			},
 		]
+	},
+	{
+		path: "/home",
+		element: <Home/>
 	}
 ])
 
