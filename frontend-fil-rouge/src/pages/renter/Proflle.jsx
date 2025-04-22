@@ -1,7 +1,11 @@
 import { SearchBar } from "../../components/SearchBar";
+import { useHandleSibeBar } from "../../hooks/useSideBar";
+
 
 export function Profile()
 {
+
+
 return <div className="relative w-full h-[362px] inside hidden md:block z-30" >
     <div className="absolute w-full h-full bg-(--profile-bg)">
         <div className="max-w-[1258px] mx-auto px-[60px] pt-[33px] flex flex-col items-stretch justify-start">
@@ -9,7 +13,7 @@ return <div className="relative w-full h-[362px] inside hidden md:block z-30" >
                 Profile de l'utilisateur
             </div>
             <div className="text-white text-[32px] font-medium mt-[30px]">
-                Bienvenu(e) username
+                Bienvenu(e) username 
             </div>
             <div className="text-white text-[14px] lg:w-[40%] ">
                 Ceci est votre profile utilisateur, profiter des avantages

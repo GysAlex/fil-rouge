@@ -96,3 +96,37 @@ export function HomeSmaller()
 }
 
 
+export function AuthNavBar()
+{
+    return <div className="w-full h-[89px] sticky top-0 bg-white z-50 hidden md:flex items-center justify-center" style={{boxShadow: "0px 5px 10px rgba(0, 0, 0, 0.05)"}}>
+    <div className="w-full max-w-[1258px] px-4 md:px-2 lg:px-0 mx-auto flex items-center justify-between">
+        <div className="brand mx-2 md:mx-0 flex items-center justify-start gap-[15px]">
+            <div className="burger ">
+                <button className="burger flex items-center justify-center size-[46px] bg-(--primary-green) rounded-full">
+                    <i className="fa-solid fa-bars text-2xl text-white"></i>
+                </button>
+            </div>
+            <div className="mother hidden md:flex ">
+                <span className="text-(--primary-green) font-extrabold text-[20px]">Metch</span>
+                <span className="font-extrabold text-(--text-color) text-[20px]">App</span>
+            </div>
+        </div>
+        <div className="flex items-center justify-center gap-[30px]"> 
+            <div className="nav hidden xl:flex items-center justify-center gap-8">
+                <Link className="n-item font-medium text[14px] text-(--primary-green) relative p-2">
+                    <i className="fa-solid fa-bell text-[22px]"></i>
+                    <span className="absolute size-2 rounded-full top-0 right-0 bg-(--primary-green)"></span>
+                </Link>
+                <button className="flex items-center justify-center gap-3 cursor-pointer">  
+                    <div className="profile size-[45px] object-cover">
+                        <img src="http://localhost:5174/images/team2.jpg" className="rounded-full w-full h-full" alt="" />
+                    </div>
+                    <span>Alexis</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+}
+
+
