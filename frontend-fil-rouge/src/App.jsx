@@ -3,6 +3,8 @@ import './tail.css'
 import { Main } from './containers/Main'
 import { Detail } from './pages/Detail'
 import { Resultatrecherche } from './pages/Resultatrecherche'
+import { Home } from './pages/Home'
+import { Notificationclient } from './pages/Notificationclients'
 
 const router = createBrowserRouter([
 	{
@@ -26,8 +28,18 @@ const router = createBrowserRouter([
 				path:"/resultatrecherche",
 				element: <Resultatrecherche/>
 			},
+			
 		]
-	}
+	},
+	{
+		path: "/home",
+		element: <Home/>
+	},
+
+	{
+		path:"/notificationclient",
+		element: <Notificationclient/>
+	},
 
 	
 ])
@@ -39,4 +51,4 @@ function App() {
 	</RouterProvider>
 }
 
-export default App
+export default App;

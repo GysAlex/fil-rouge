@@ -1,0 +1,43 @@
+.autocomplete-container {
+    position: relative; /* Important pour positionner la liste des suggestions */
+  }
+  
+  .autocomplete-input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 100%; /* Adaptez la largeur selon vos besoins */
+    box-sizing: border-box; /* Pour que le padding n'affecte pas la largeur totale */
+  }
+  
+  .autocomplete-suggestions {
+    position: absolute;
+    top: 100%; /* Positionne la liste juste en dessous de l'input */
+    left: 0;
+    right: 0;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-top: none;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    margin-top: 2px;
+    padding: 0;
+    list-style: none;
+    overflow: hidden; /* Important pour la transition de height */
+    transition: height 0.3s ease-in-out;
+    z-index: 100; /* Pour s'assurer que la liste est au-dessus des autres éléments */
+    height: 0; /* Initialement cachée avec une hauteur de 0 */
+  }
+  
+  .autocomplete-suggestions.show {
+    height: auto; /* La hauteur s'ajuste en fonction du contenu */
+  }
+  
+  .autocomplete-suggestion-item {
+    padding: 10px;
+    cursor: pointer;
+  }
+  
+  .autocomplete-suggestion-item:hover {
+    background-color: #f0f0f0;
+  }

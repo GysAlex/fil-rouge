@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
-import { ChevronLeft, ChevronRight, SlidersHorizontal, X } from 'lucide-react';
+import { ChevronLeft, ChevronRight, SlidersHorizontal, X } from "lucide-react";
+
 
 export  function FilterScrollbarWithModal() {
   const scrollContainerRef = useRef(null);
