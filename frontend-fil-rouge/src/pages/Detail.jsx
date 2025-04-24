@@ -9,11 +9,22 @@ import { Chart as ChartJS} from "chart.js/auto";
 import { Button, StrokeButton } from "../components/Button";
 import { CommentSwiper } from "../components/CommentSwiper";
 import { Home } from "../components/Home";
-
+import { useModal } from "../hooks/useModal";
+import { ModalRenterLogin } from "../containers/modals.jsx/ModalRenterLogin";
+import { ModalContainer } from "../containers/modals.jsx/ModalContainer";
 
 
 export function Detail()
 {
+    const {openModal} = useModal()
+
+    const handleClick = ()=>{
+        openModal(ModalRenterLogin)
+        console.log("Bonjour")
+    }
+
+    console.log("Bonjour")
+
     return <>
         <Link className="p-2.5 h-[44px] w-fit rounded-4xl cursor-pointer text-white bg-(--primary-green) flex items-center justify-center gap-3">
             <i className="fa-solid fa-arrow-left"></i>
@@ -35,7 +46,8 @@ export function Detail()
                     </div>
                 </div>
             </div>
-
+            <ModalContainer />
+            
             <div className="flex items-center justify-between sm:gap-3 gap-5">
                 <button className="fav cursor-pointer flex items-center justify-start gap-2">
                     <span className="hidden md:block">Ajouter aux favoris</span>
@@ -155,7 +167,7 @@ export function Detail()
                             </ArrowItem>
                         </div>
                         <div className="mt-[30px] flex items-center justify-center lg:justify-start  mb-[30px] lg:mb-0">
-                            <Button>
+                            <Button handleClick={handleClick}>
                                 je suis intéressé(é) par ce logement
                             </Button>
                         </div>

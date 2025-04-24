@@ -119,7 +119,7 @@ export function AuthNavBar()
                 </Link>
                 <button className="flex items-center justify-center gap-3 cursor-pointer">  
                     <div className="profile size-[45px] object-cover">
-                        <img src="http://localhost:5174/images/team2.jpg" className="rounded-full w-full h-full" alt="" />
+                        <img src="http://localhost:5173/images/team2.jpg" className="rounded-full w-full h-full" alt="" />
                     </div>
                     <span>Alexis</span>
                 </button>

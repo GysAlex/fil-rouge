@@ -17,6 +17,8 @@
 	--title-weight: medium;
 	--title-size: 22px;
 	--box-shadow: 0px 0px 7px rgba(0, 0, 0, 0.25);
+	--livre: #fbbd04;
+	--livre2: #1876f2;
 }
 
 
@@ -204,6 +206,7 @@ select:open::picker-icon {
 	}
 }
 
+
 .modal form
 {
 	transition-behavior: allow-discrete;
@@ -213,6 +216,12 @@ select:open::picker-icon {
 	transform: translateX(-20vw);	
 }
 
+
+.modal .ajust
+{
+	margin-top: 100px;
+}
+
 .modal.show form
 {
 	transform: translateX(0);
@@ -220,6 +229,7 @@ select:open::picker-icon {
 		transform: translateX(20vh)
 	}
 }
+
 
 
 .sidebar
@@ -336,7 +346,6 @@ select:open::picker-icon {
 	transition-behavior: allow-discrete;
 	transition-property: display opacity;
 }
-
 
 
 .sidebar.expanded a span

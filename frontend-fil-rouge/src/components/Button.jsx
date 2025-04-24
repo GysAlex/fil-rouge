@@ -1,6 +1,6 @@
-export function Button({children})
+export function Button({children, handleClick=null})
 {
-    return <button className="p-5  h-[44px] bg-(--primary-green) rounded-3xl min-w-max lg:w-fit text-white cursor-pointer flex items-center justify-center gap-2">
+    return <button onClick={handleClick} className="p-5  h-[44px] bg-(--primary-green) rounded-3xl min-w-max lg:w-fit text-white cursor-pointer flex items-center justify-center gap-2">
         {children}
     </button>
 }
