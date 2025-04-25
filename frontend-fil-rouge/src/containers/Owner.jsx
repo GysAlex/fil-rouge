@@ -6,7 +6,7 @@ import { useAuth } from "../hooks/useAuth";
 import { Navigate } from "react-router-dom";
 import { ModalContainer } from "./modals.jsx/ModalContainer";
 
-export function Renter()
+export function Owner()
 {
     const {isExpanded} = useHandleSibeBar()
     const {state} = useAuth()

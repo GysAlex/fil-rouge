@@ -1,0 +1,44 @@
+.form-container {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+}
+
+.form-container > div {
+    position: absolute;
+    display: none;
+    transition-behavior: allow-discrete;
+    transition-property: display opacity transform;
+    top: 20px;
+    left: 30px;
+    width: 97%;
+    opacity: 0;
+    transform: translateX(-20vw);
+    transition: opacity 0.5s ease, transform 0.5s;
+}
+
+.form-container > div:nth-child(2n).active {
+    opacity: 1;
+    transform: translateX(0);
+    display: unset;
+
+    @starting-style{
+        transform: translateX(20vw);
+        opacity: 0;
+    }
+}
+
+.form-container > div:nth-child(2n + 1).active {
+    opacity: 1;
+    transform: translateX(0);
+    display: unset;
+
+    @starting-style{
+        transform: translateX(-20vw);
+        opacity: 0;
+    }
+}
+
+
+
+/* Sty

@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { SearchBar } from "./SearchBar";
 import { useModal } from "../hooks/useModal";
 import { SearchModal } from "../containers/modals.jsx/SearchModal";
+import { useAuth } from "../hooks/useAuth";
 
 
 export function NavBar()
@@ -98,6 +99,7 @@ export function HomeSmaller()
 
 export function AuthNavBar()
 {
+    const {user} = useAuth()
     return <div className="w-full h-[89px] sticky top-0 bg-white z-50 hidden md:flex items-center justify-center" style={{boxShadow: "0px 5px 10px rgba(0, 0, 0, 0.05)"}}>
     <div className="w-full max-w-[1258px] px-4 md:px-2 lg:px-0 mx-auto flex items-center justify-between">
         <div className="brand mx-2 md:mx-0 flex items-center justify-start gap-[15px]">
@@ -119,9 +121,9 @@ export function AuthNavBar()
                 </Link>
                 <button className="flex items-center justify-center gap-3 cursor-pointer">  
                     <div className="profile size-[45px] object-cover">
-                        <img src="http://localhost:5173/images/team2.jpg" className="rounded-full w-full h-full" alt="" />
+                        <img src={user.image ?? "http://localhost:5173/images/team2.jpg"} className="rounded-full w-full h-full" alt="" />
                     </div>
-                    <span>Alexis</span>
+                    <span>{user.name}</span>
                 </button>
             </div>
         </div>

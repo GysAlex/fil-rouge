@@ -6,6 +6,7 @@ use App\Http\Requests\AuthRegisterRequest;
 use App\Http\Requests\LoginRequest;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Http\Request;
 
 class AuthController extends Controller
 {
@@ -26,14 +27,22 @@ class AuthController extends Controller
 
         $user = User::where('email', $fields['email'])->first();
 
+        
+
         if(!$user || !Hash::check($fields['password'], $user->password))
         {
             return ['logfail', 'vos identifiants sont incorrectes'];
         }
 
-        $token = $user->createToken($user->name);
+        Auth()->login($user);
 
-        return ['user' => $user, 'token' => $token->plainTextToken];
+        return ['user' => $user];
+
+        return response()->json([
+            'user' => $user,
+            'token' => $token,
+            'message' => 'Connexion réussie'
+        ], 200);
     }
 
     public function logout()
@@ -43,4 +52,6 @@ class AuthController extends Controller
         return ['message' => 'au revoir !'];
     }
 
+
+    
 }

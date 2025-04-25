@@ -9,22 +9,22 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 
-class GoogleRenterAuthController
+class FacebookRenterAuthController extends Controller
 {
-    public function handleGoogleCallback()
+    public function handlefacebookCallback()
     {
 
-        $googleUser = Socialite::driver('google')->user()->user;
+        $facebookUser = Socialite::driver('google')->user()->user;
         
         $userData = [
-            'name' => $googleUser['given_name'],
-            'family_name' => $googleUser['family_name'],
-            'email' => $googleUser['email'],
-            'image' => $googleUser['picture'],
-            'google_id' => $googleUser['id'],
+            'name' => $facebookUser['given_name'],
+            'family_name' => $facebookUser['family_name'],
+            'email' => $facebookUser['email'],
+            'image' => $facebookUser['picture'],
+            'facebook_id' => $facebookUser['id'],
         ];
 
-        $user = User::where('google_id', $googleUser['id'])->first();
+        $user = User::where('facebook_id', $facebookUser['id'])->first();
         
         if ($user) {
             Auth::login($user);
@@ -46,8 +46,11 @@ class GoogleRenterAuthController
         return redirect("http://localhost:5173" . '/renter/profile');
     }
 
-    public function redirectToGoogle()
+    public function redirectToFacebook()
     {
-        return Socialite::driver('google')->redirect();
+        return Socialite::driver('facebook')->redirect();
     }
 }
+
+
+

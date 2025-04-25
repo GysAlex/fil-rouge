@@ -5,6 +5,8 @@ import { Detail } from './pages/Detail'
 import { Home } from './pages/Home'
 import { Renter } from './containers/Renter'
 import { Profile } from './pages/renter/Proflle'
+import { Owner } from './containers/Owner'
+import { NewHome } from './pages/owner/NewHome'
 
 const router = createBrowserRouter([
 	{
@@ -14,10 +16,6 @@ const router = createBrowserRouter([
 			{
 				path: "/detail/1",
 				element: <Detail/>
-			},
-			{
-				path: "/owner",
-				element: <div>This is the owner page</div>
 			},
 		]
 	},
@@ -34,7 +32,22 @@ const router = createBrowserRouter([
 				element: <Profile />
 			}
 		]
-	}
+	},
+	{
+		path: "/owner",
+		element: <Owner />,
+		children:[
+			{
+				path:"profile",
+				element: <Profile />
+			},
+
+			{
+				path:"new-home",
+				element: <NewHome />
+			}
+		]
+	}	
 ])
 
 function App() {
