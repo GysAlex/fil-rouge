@@ -3,12 +3,29 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\GoogleRenterAuthController;
 use App\Http\Controllers\FacebookRenterAuthController;
+use App\Http\Controllers\AuthController;
+
 
 
 Route::get('/', function () {
     return view('welcome');
 });
 
+
+Route::post('/login', function (Request $request) {
+    $credentials = $request->only('email', 'password');
+
+    if (Auth::attempt($credentials)) {
+        // User authenticated successfully
+        return response()->json([
+            'message' => 'Login successful!',
+        ]);
+    } else {
+        return response()->json([
+            'message' => 'Invalid login credentials!',
+        ], 401);
+    }
+});
 
 Route::get('/auth/google/redirect', [
     GoogleRenterAuthController::class,

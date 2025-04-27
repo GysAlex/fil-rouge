@@ -41,6 +41,7 @@ export const HandleUserProvider = ({ children }) => {
             const response = await axios.put(`/api/users/${userData.id}`, userData);
             if (response.status === 200) {
                 setUser(response.data);
+                console.log('Utilisateur mis à jour avec succès', response.data);
             } else {
                 console.error('Erreur lors de la mise à jour de l\'utilisateur', response.statusText);
             }

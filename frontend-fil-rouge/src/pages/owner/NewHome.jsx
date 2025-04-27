@@ -1,9 +1,10 @@
-import { useState } from "react";
-import { StepOne } from "../../components/stepForm/Steps";
+import { useEffect, useState } from "react";
+import ImageUploader, { StepOne } from "../../components/stepForm/Steps";
 import { StepTwo } from "../../components/stepForm/Steps";  
 import { StepThree } from "../../components/stepForm/Steps";
 import { StepFour } from "../../components/stepForm/Steps";
 import "../../stepForm.css"
+import { ProgressBar } from "../../components/ProgressBar";
 
 export function NewHome() {
     const [currentStep, setCurrentStep] = useState(1)
@@ -12,16 +13,20 @@ export function NewHome() {
 
     const nextStep = (data) => {
         setFormData({ ...formData, ...data })
-        console.log(formData)
-        setCurrentStep(prevStep => prevStep + 1)
+
+        currentStep < 4 && setCurrentStep(prevStep => prevStep + 1)
     };
 
     const prevStep = () => {
         setCurrentStep(prevStep => prevStep - 1)
     }
 
-    const handleSubmit = () => {
-        // Traitez ici les données complètes du formulaire (formData)
+    useEffect(() => {
+        console.log('formData mis à jour :', formData);
+    }, [formData]); 
+
+    const handleSubmit = (e) => {
+        e.preventDefault()
         console.log('Données du formulaire soumises :', formData)
         alert('Formulaire soumis !')
     }
@@ -30,14 +35,14 @@ export function NewHome() {
         <span className="text-(--primary-green)">Ajouter un logements</span>
         <div className="flex items-stretch flex-col justify-start gap-4 mt-12">
             <div>
-                There will be the progress bar and 
+                <ProgressBar currentStep={currentStep} totalSteps={4} />
             </div>
-            <form action="" className="mb-10">
-                <div className="form-container px-[30px] py-[20px] lg:h-[590px]" style={{boxShadow: '0 0 7px rgba(0, 0, 0, .25)'}}>
+            <form action="" className="mb-10" onSubmit={handleSubmit}>
+                <div className="form-container px-[30px] py-[20px] h-[700px] lg:h-[590px]" style={{boxShadow: '0 0 7px rgba(0, 0, 0, .25)'}}>
                     <StepOne currentPage={currentStep} nextStep={nextStep} formData={formData}/> 
-                    <StepTwo currentPage={currentStep} prevStep={prevStep}/>
-                    <StepThree currentPage={currentStep} prevStep={prevStep}/> 
-                    <StepFour currentPage={currentStep} prevStep={prevStep}/> 
+                    <StepTwo currentPage={currentStep} prevStep={prevStep} nextStep={nextStep}/>
+                    <ImageUploader currentPage={currentStep} formData={formData} prevStep={prevStep} nextStep={nextStep}/> 
+                    <StepFour currentPage={currentStep} prevStep={prevStep} nextStep={nextStep} formData={formData}/> 
                 </div>
             </form>
         </div>

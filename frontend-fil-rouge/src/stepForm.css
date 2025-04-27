@@ -9,33 +9,24 @@
     display: none;
     transition-behavior: allow-discrete;
     transition-property: display opacity transform;
+    transition-duration: 0.5s;
     top: 20px;
     left: 30px;
     width: 97%;
     opacity: 0;
-    transform: translateX(-20vw);
-    transition: opacity 0.5s ease, transform 0.5s;
+    scale: 0.6;
 }
 
-.form-container > div:nth-child(2n).active {
+
+
+.form-container > div.active {
     opacity: 1;
-    transform: translateX(0);
     display: unset;
+    scale: 1;
 
     @starting-style{
-        transform: translateX(20vw);
         opacity: 0;
-    }
-}
-
-.form-container > div:nth-child(2n + 1).active {
-    opacity: 1;
-    transform: translateX(0);
-    display: unset;
-
-    @starting-style{
-        transform: translateX(-20vw);
-        opacity: 0;
+        scale: 0.8;
     }
 }
 

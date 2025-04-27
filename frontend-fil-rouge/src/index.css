@@ -450,3 +450,31 @@ select:open::picker-icon {
 {
 	transform: translateX(30px);
 }
+
+
+.atout input[type=checkbox]
+{
+	appearance: none;
+	width: 16px;
+	height: 16px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	position: relative;
+}
+
+.atout input[type=checkbox]::before
+{
+	content: '';
+	position: absolute;
+	width: 16px;
+	height: 16px;
+	border-radius: 50%;
+	transition:  all ease .4s;
+	border: solid 1px var(--primary-green)
+}
+
+.atout input[type=checkbox]:checked::before
+{
+	background-color: #28B446;
+}

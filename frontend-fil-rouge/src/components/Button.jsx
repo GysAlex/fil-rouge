@@ -1,6 +1,6 @@
-export function Button({children, handleClick=null})
+export function Button({children, handleClick=null, type="button"})
 {
-    return <button type="button" onClick={handleClick} className="p-5  h-[44px] bg-(--primary-green) rounded-3xl min-w-max lg:w-fit text-white cursor-pointer flex items-center justify-center gap-2">
+    return <button type={type} onClick={handleClick} className="p-5  h-[44px] bg-(--primary-green) rounded-3xl min-w-max lg:w-fit text-white cursor-pointer flex items-center justify-center gap-2">
         {children}
     </button>
 }
@@ -29,7 +29,7 @@ export function LittleStrokeButton({children})
 
 export function ButtonModal({children, handleClick=null})
 {
-    return <button type="button" onClick={handleClick} className="p-5 mb-4 mt-2 h-[44px] bg-(--primary-green) rounded-3xl min-w-max lg:w-fit text-white cursor-pointer flex items-center justify-center gap-2">
+    return <button onClick={handleClick} className="p-5 mb-4 mt-2 h-[44px] bg-(--primary-green) rounded-3xl min-w-max lg:w-fit text-white cursor-pointer flex items-center justify-center gap-2">
         {children}
     </button>
 }

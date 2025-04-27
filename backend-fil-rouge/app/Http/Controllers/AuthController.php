@@ -34,15 +34,9 @@ class AuthController extends Controller
             return ['logfail', 'vos identifiants sont incorrectes'];
         }
 
-        Auth()->login($user);
+        Auth::login($user);
 
         return ['user' => $user];
-
-        return response()->json([
-            'user' => $user,
-            'token' => $token,
-            'message' => 'Connexion réussie'
-        ], 200);
     }
 
     public function logout()

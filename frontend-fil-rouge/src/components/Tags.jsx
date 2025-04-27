@@ -12,3 +12,23 @@ export function HomeTags({children})
         {children}
     </span> 
 }
+
+export function ChoicesTag({children, handleClick})
+{
+    return <span onClick={handleClick} className=" cursor-pointer select-none p-2 text-(--text-color) text-sm border border-(--primary-green) rounded-2xl flex items-center justify-center gap-2">
+        {children}
+    </span>
+}
+
+export function ChoosedTag({children, handleClick})
+{
+    return <span onClick={handleClick} className="px-2 py-2 cursor-pointer min-w-max text-sm bg-(--primary-green) rounded-2xl text-white flex items-center justify-between gap-2">
+
+        <div className="flex items-center justify-center gap-2">        
+            {children}
+        </div>
+        <span >
+            <i className="fa-solid fa-x"></i>
+        </span>
+    </span>
+}
