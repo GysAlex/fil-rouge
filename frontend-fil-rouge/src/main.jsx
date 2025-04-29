@@ -8,21 +8,29 @@ import { ModalProvider } from './hooks/useModal.jsx';
 import { HandleSibeBarProvider } from './hooks/useSideBar.jsx';
 import { AuthContextProvider } from './hooks/useAuth.jsx';
 import { HandleUserProvider } from './hooks/useUser.jsx';
+import { LocationInfoProvider } from './hooks/useLocation.jsx';
+import { TagsProvider } from './hooks/useTags.jsx';
+import { AssetProvider } from './hooks/useAsset.jsx';
 
 
 
 createRoot(document.getElementById('root')).render(
-    <AuthContextProvider>
-      
-      <HandleUserProvider>
-        <HandleSibeBarProvider>
-          <ModalProvider>
-            <StrictMode>
-              <App />
-            </StrictMode>
-          </ModalProvider>
-        </HandleSibeBarProvider>
-      </HandleUserProvider>
 
-    </AuthContextProvider>
+  <LocationInfoProvider>
+    <AssetProvider>
+      <TagsProvider>
+        <AuthContextProvider>
+          <HandleUserProvider>
+            <HandleSibeBarProvider>
+              <ModalProvider>
+                <StrictMode>
+                  <App />
+                </StrictMode>
+              </ModalProvider>
+            </HandleSibeBarProvider>
+          </HandleUserProvider>
+        </AuthContextProvider>
+      </TagsProvider>
+    </AssetProvider>
+  </LocationInfoProvider>
 )

@@ -60,13 +60,12 @@ export function SearchInput2({handleInputFocus, val, parentChange, showSuggestio
 
 
     useEffect(()=>{
-        setValues(data)
-        const filteredValues  = values;
-    }, [])
+        setValues(data || [])
+    }, [data])
 
     
     const filteredValues  = !newC ? values.filter((suggestion) =>
-        suggestion.toLowerCase().includes(val.toLowerCase())
+        suggestion?.toLowerCase().includes(val?.toLowerCase())
       ) : values;
 
     const handleChoice = (val) =>{
@@ -91,8 +90,8 @@ export function SearchInput2({handleInputFocus, val, parentChange, showSuggestio
 
 
     return <>
-        <input type="text" value={val} onClick={handleCLick} onChange={(e) => handleChange(e)} name={id} onFocus={handleInputFocus} id={id} className="relative  w-full px-[10px] h-[40px] border border-(--light-green2)"  />
-        {showSuggestions && choice  && <ul className="absolute bg-white top-[110%]  z-70 rounded-2xl w-full flex flex-col items-stretch justify-start text-sm" style={{boxShadow: "0 0 7px rgba(0, 0, 0, .1)" }}>
+        <input type="text" value={val || ''} onClick={handleCLick} onChange={(e) => handleChange(e)} name={id} onFocus={handleInputFocus} id={id} className="relative  w-full px-[10px] h-[40px] border border-(--light-green2)"  />
+        {showSuggestions && choice  && values?.length > 0 && <ul className="absolute bg-white top-[110%]  z-70 rounded-2xl w-full flex flex-col items-stretch justify-start text-sm" style={{boxShadow: "0 0 7px rgba(0, 0, 0, .1)" }}>
             {filteredValues.map((val, index) => <li key={index} onClick={()=>handleChoice(val)} className="p-3 cursor-pointer rounded-2xl transition-all ease-in duration-300 hover:bg-(--light-green2)">{val}</li>)}
 
         </ul> }    

@@ -12,11 +12,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('universities', function (Blueprint $table) {
-            $table->id();
-            $table->string('universitie_name');
-            $table->foreignIdFor(Region::class)->constrained()->cascadeOnDelete();
-            $table->timestamps();
+        Schema::table('universities', function (Blueprint $table) {
+            $table->foreignIdFor(Region::class)->nullable()->constrained()->after('universitie_name')->cascadeOnDelete();
         });
     }
 
@@ -27,7 +24,7 @@ return new class extends Migration
     {
         Schema::table('universities', function (Blueprint $table) {
             $table->dropForeign(['region_id']);
+            $table->dropColumn('region_id');
         });
-        Schema::dropIfExists('universities');
     }
 };

@@ -4,7 +4,10 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\GoogleRenterAuthController;
 use App\Http\Controllers\FacebookRenterAuthController;
 use App\Http\Controllers\AuthController;
-
+use App\Models\Region;
+use App\Models\University;
+use App\Models\PropertyTags;
+use App\Models\Asset;
 
 
 Route::get('/', function () {
@@ -48,3 +51,23 @@ Route::get('/auth/facebook/callback', [
     'handleFacebookCallback'
 ])->name('facebook.callback');
 
+
+// Route::get('/university', function () {
+//     $region = Region::where('region_name', 'yaounde')->first();
+
+//     University::create([
+//         'universitie_name' => 'ENS de yaounde',
+//         'region_id' => $region->id
+//     ]);
+
+//     return "Ca marche !";
+// });
+
+
+// Route::get('/createAsset', function () {
+
+//     $tag = Asset::create([
+//         'asset_name' => "Lieux de détente à proximité"
+//     ]);
+//     return $tag;
+// });

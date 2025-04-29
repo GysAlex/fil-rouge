@@ -9,6 +9,8 @@ import { Owner } from './containers/Owner'
 import { NewHome } from './pages/owner/NewHome'
 import { NotificationClient } from './pages/renter/NotificationClient'
 import { Favoris } from './pages/renter/Favoris'
+import { DashboardAdmin } from './pages/owner/DashboardAdmin'
+import { StatistiqueLogement } from './pages/owner/StatistiqueLogement'
 
 const router = createBrowserRouter([
 	{
@@ -33,6 +35,7 @@ const router = createBrowserRouter([
 				path:"profile",
 				element: <Profile />
 			},
+
 			{
 				path:"notificationclient",
 				element: <NotificationClient />
@@ -40,7 +43,8 @@ const router = createBrowserRouter([
 			{
 				path:"favoris",
 				element: <Favoris />
-			}
+			},
+			
 		]
 	},
 	{
@@ -55,6 +59,15 @@ const router = createBrowserRouter([
 			{
 				path:"new-home",
 				element: <NewHome />
+			},
+
+			{
+				path:"dashboardadmin",
+				element: <DashboardAdmin />
+			},
+			{
+				path:"statistiquelogement",
+				element: <StatistiqueLogement />
 			}
 		]
 	}

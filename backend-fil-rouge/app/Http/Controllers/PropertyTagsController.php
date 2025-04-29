@@ -13,7 +13,8 @@ class PropertyTagsController extends Controller
      */
     public function index()
     {
-        //
+        $propertyTags = PropertyTags::all();
+        return response()->json($propertyTags);
     }
 
     /**

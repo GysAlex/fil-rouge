@@ -3,6 +3,8 @@ import { InputStepForm } from "../Input"
 import { Button, StrokeButton } from "../Button"
 import { ChoicesTag, ChoosedTag } from "../Tags"
 import { SearchInput2 } from "../SearchInput";
+import { useLocation } from "../../hooks/useLocation";
+import { useTags } from "../../hooks/useTags";
 
 const initialAtoutsFromDB = [
     { id: 1, label: 'Sécurité 24/24' },
@@ -40,6 +42,23 @@ export function StepOne({nextStep, formData, currentPage})
     const [nouveauNomAppartement, setNouveauNomAppartement] = useState('');
 
 
+    const [universities, setUniversities] = useState([]);
+    const {regions, getUniversitiesByRegion} = useLocation()
+
+
+    // Ajoutez un useEffect pour mettre à jour les universités quand la région change
+    useEffect(() => {
+        if (propertyRegion) {
+            const universitiesList = getUniversitiesByRegion(propertyRegion);
+            setUniversities(universitiesList);
+            setPropertyUniversity(universitiesList[0]?.universitie_name || ''); // Mettre à jour la valeur par défaut de l'université
+        }
+
+
+    }, [propertyRegion]);
+
+
+
     /* Handle first suggestion */
     const inputRef = useRef(null);
     const [showCountriesSuggestion, setshowCountriesSuggestion] = useState(false);
@@ -68,7 +87,7 @@ export function StepOne({nextStep, formData, currentPage})
     setShowUniversitiesSuggestion(true); // Afficher les suggestions au focus
     };
 
-    /* Handle first suggestion */
+    /* Handle Second suggestion */
 
     const inputRef2 = useRef(null);
     const [showRegionSuggestion, setShowRegionSuggestion] = useState(false)
@@ -85,12 +104,38 @@ export function StepOne({nextStep, formData, currentPage})
     return () => {
         document.removeEventListener('mousedown', handleOutsideClick);
     };
-    }, [inputRef]);
+    }, [inputRef2]);
 
 
     const handleRegionOnFocusInputFocus = () => {
         setShowRegionSuggestion(true); // Afficher les suggestions au focus
     };
+
+    /* Handle Third suggestion */
+
+    const inputRef3 = useRef(null);
+    const [showTypeSuggestion, setshowTypeSuggestion] = useState(false);
+
+    useEffect(() => {
+
+        const handleOutsideClick = (event) => {
+            if (inputRef3.current && !inputRef3.current.contains(event.target)) {
+                setshowTypeSuggestion(false);
+            }
+        };
+    
+        document.addEventListener('mousedown', handleOutsideClick);
+    
+        return () => {
+            document.removeEventListener('mousedown', handleOutsideClick);
+        };
+
+    }, [inputRef3]);
+
+
+    const handleTypeOnFocusInputFocus = () => {
+        setshowTypeSuggestion(true); // Afficher les suggestions au focus
+    }
 
 
 
@@ -134,18 +179,23 @@ export function StepOne({nextStep, formData, currentPage})
             <div className="grid lg:grid-cols-2 mt-[30px]">
                 <div className="left w-[90%] flex items-stretch justify-start gap-2 flex-col">
                     <InputStepForm id="property_name" labelName="Nom du logement" type="text" val={propertyName} handleChange={(e)=>setPropertyName(e.target.value)}/>
-                    <InputStepForm id="property_type" labelName="type de logement" type="text" val={propertyType} handleChange={(e)=>setPropertyType(e.target.value)}/>
+                    <div className="flex items-stretch relative text-[15px] gap-1 flex-col my-2 justify-center w-full" ref={inputRef3}>
+                        <label htmlFor="universtiy" className="text-(--title-color)">Type de logement</label>
+                        <SearchInput2 val={propertyType} parentChange={(val) => setPropertyType(val)} id="types" handleInputFocus={handleTypeOnFocusInputFocus} showSuggestions={showTypeSuggestion} data={['studio', 'immeuble', 'appartement', 'cités', 'chambre' ]}/>
+                    </div>
                     <InputStepForm id="property_price" labelName="tarif annuel du logement" type="text" val={propertyPrice} handleChange={(e)=>setPropertyPrice(e.target.value)}/>
                 </div>
                 <div className="right w-[90%] flex items-stretch justify-start gap-2 flex-col">
                     <div className="flex items-stretch relative text-[15px] gap-1 flex-col my-2 justify-center w-full" ref={inputRef2}>
                         <label htmlFor="universtiy" className="text-(--title-color)">Régions</label>
-                        <SearchInput2 val={propertyRegion} parentChange={(val) => setPropertyRegion(val)} id="Régions" handleInputFocus={handleRegionOnFocusInputFocus} showSuggestions={showRegionSuggestion} data={['Littoral', 'Centre', 'Extrème-Nord', 'Nord']}/>
+                        <SearchInput2 val={propertyRegion} parentChange={(val) => setPropertyRegion(val)} id="Régions" handleInputFocus={handleRegionOnFocusInputFocus} showSuggestions={showRegionSuggestion} data={regions.map((el) => el.region_name)}/>
                     </div>
                     
                     <div className="flex items-stretch relative text-[15px] gap-1 flex-col my-2 justify-center w-full" ref={inputRef}>
                         <label htmlFor="universtiy" className="text-(--title-color)">Université</label>
-                        <SearchInput2 val={propertyUniversity} parentChange={(val) => setPropertyUniversity(val)} id="universtiy" handleInputFocus={handleCountryInputFocus} showSuggestions={showCountriesSuggestion} data={['UIT-Douala', 'Essec-Douala', 'ENS-Douala', 'ENSET']}/>
+                        <SearchInput2 val={propertyUniversity} parentChange={(val) => setPropertyUniversity(val)} id="universtiy" handleInputFocus={handleCountryInputFocus} showSuggestions={showCountriesSuggestion} data={universities.map((un) => {
+                            return un.universitie_name
+                        })}/>
                     </div>
 
                     <div className="flex items-stretch text-[15px] gap-1 flex-col my-2 justify-center w-full">
@@ -228,8 +278,8 @@ export function StepTwo({currentPage, prevStep, nextStep})
                 available: false,
                 number: 0
             })
-            
         }
+
         else
         {
             setChambre({
@@ -623,34 +673,7 @@ export function StepFour({currentPage, prevStep, nextStep, formData})
         prevStep()
     }
 
-
-    const [choices, setChoice] = useState(initialTagsFromTheBD)
-
-    
-    const [choosed, setChoosed] = useState([])
-
-
-    const addChoice = (val)=>{
-
-        if(!choosed.includes(val))
-        {
-            setChoosed([
-                ...choosed,
-                val
-            ])
-
-            setChoice(choices.filter((c) => c.id != val.id))
-        }
-
-    }
-
-    const removeChoice = (val)=>{
-        setChoice([...choices,
-            val
-        ])
-
-        setChoosed(choosed.filter((value) => value != val))
-    }
+    const {availableTags, addTag, removeTag, selectedTags} = useTags()
 
     const [selectedAtouts, setSelectedAtouts] = useState(formData.selectedAtouts || []);
 
@@ -681,14 +704,14 @@ export function StepFour({currentPage, prevStep, nextStep, formData})
             </span>
             </div>
             <div className="mt-[30px] ">
-                {choosed.length <=0 ?  <div className="choosed">
+                {selectedTags.length <=0 ?  <div className="choosed">
 
                 </div> : <div className="choosed my-5 flex items-center justify-start gap-2 flex-wrap">
-                        {choosed.map((val, index) => (<ChoosedTag handleClick={()=>removeChoice(val)} key={index}>{val.value}</ChoosedTag>))}
+                        {selectedTags.map((val, index) => (<ChoosedTag handleClick={()=>removeTag(val)} key={index}>{val.tag_name}</ChoosedTag>))}
                     </div>}
 
                 <div className="choices flex flex-wrap items-center justify-start gap-3">
-                    {choices.map((val, index) => (<ChoicesTag handleClick={()=>addChoice(val)} key={index}>{val.value}</ChoicesTag>))}
+                    {availableTags.map((val, index) => (<ChoicesTag handleClick={()=>addTag(val)} key={index}>{val.tag_name}</ChoicesTag>))}
                 </div>
             </div>
 

@@ -2,11 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Assets;
-use App\Http\Requests\StoreAssetsRequest;
-use App\Http\Requests\UpdateAssetsRequest;
+use Illuminate\Http\Request;
 
-class AssetsController extends Controller
+class AssetController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -19,7 +17,7 @@ class AssetsController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreAssetsRequest $request)
+    public function store(Request $request)
     {
         //
     }
@@ -27,7 +25,7 @@ class AssetsController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Assets $assets)
+    public function show(string $id)
     {
         //
     }
@@ -35,7 +33,7 @@ class AssetsController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateAssetsRequest $request, Assets $assets)
+    public function update(Request $request, string $id)
     {
         //
     }
@@ -43,7 +41,7 @@ class AssetsController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Assets $assets)
+    public function destroy(string $id)
     {
         //
     }
