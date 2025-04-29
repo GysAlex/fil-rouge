@@ -1,7 +1,8 @@
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { InputStepForm } from "../Input"
 import { Button, StrokeButton } from "../Button"
 import { ChoicesTag, ChoosedTag } from "../Tags"
+import { SearchInput2 } from "../SearchInput";
 
 const initialAtoutsFromDB = [
     { id: 1, label: 'Sécurité 24/24' },
@@ -35,6 +36,87 @@ export function StepOne({nextStep, formData, currentPage})
     const [propertyUniversity, setPropertyUniversity] = useState(formData.propertyUniversity || "")
     const [propertyDescription, setPropertyDescription] = useState(formData.propertyDescription || "")
     const [propertyLoc, setPropertyLoc] = useState(formData.propertyLoc || false)
+    const [nomsAppartements, setNomsAppartements] = useState(formData.nomsAppartements || []);
+    const [nouveauNomAppartement, setNouveauNomAppartement] = useState('');
+
+
+    /* Handle first suggestion */
+    const inputRef = useRef(null);
+    const [showCountriesSuggestion, setshowCountriesSuggestion] = useState(false);
+    const [showUniversitiesSuggestion, setShowUniversitiesSuggestion] = useState(false)
+
+    useEffect(() => {
+    const handleOutsideClick = (event) => {
+        if (inputRef.current && !inputRef.current.contains(event.target)) {
+        setshowCountriesSuggestion(false);
+        setShowUniversitiesSuggestion(false)
+        }
+    };
+
+    document.addEventListener('mousedown', handleOutsideClick);
+
+    return () => {
+        document.removeEventListener('mousedown', handleOutsideClick);
+    };
+    }, [inputRef]);
+
+    const handleCountryInputFocus = () => {
+    setshowCountriesSuggestion(true); // Afficher les suggestions au focus
+    };
+
+    const handleUniversityInputFocus = () => {
+    setShowUniversitiesSuggestion(true); // Afficher les suggestions au focus
+    };
+
+    /* Handle first suggestion */
+
+    const inputRef2 = useRef(null);
+    const [showRegionSuggestion, setShowRegionSuggestion] = useState(false)
+
+    useEffect(() => {
+    const handleOutsideClick = (event) => {
+        if (inputRef2.current && !inputRef2.current.contains(event.target)) {
+            setShowRegionSuggestion(false);
+        }
+    };
+
+    document.addEventListener('mousedown', handleOutsideClick);
+
+    return () => {
+        document.removeEventListener('mousedown', handleOutsideClick);
+    };
+    }, [inputRef]);
+
+
+    const handleRegionOnFocusInputFocus = () => {
+        setShowRegionSuggestion(true); // Afficher les suggestions au focus
+    };
+
+
+
+    const handleTypeChange = (e) => {
+        setPropertyType(e.target.value);
+        // Réinitialiser les noms des appartements si le type change
+        if (e.target.value !== 'immeuble') {
+          setNomsAppartements([]);
+        }
+      };
+    
+      const handleNouveauNomAppartementChange = (e) => {
+        setNouveauNomAppartement(e.target.value);
+      };
+    
+      const handleAjouterAppartement = () => {
+        if (nouveauNomAppartement.trim() !== '') {
+          setNomsAppartements([...nomsAppartements, nouveauNomAppartement.trim()]);
+          setNouveauNomAppartement(''); // Réinitialiser le champ de saisie
+        }
+      };
+    
+      const handleSupprimerAppartement = (indexToDelete) => {
+        const newNomsAppartements = nomsAppartements.filter((_, index) => index !== indexToDelete);
+        setNomsAppartements(newNomsAppartements);
+      };
 
 
     const handleClick = () => {
@@ -49,29 +131,75 @@ export function StepOne({nextStep, formData, currentPage})
             <div className="title text-[18px]">
                 Informations de base 
             </div>
-            <div className="grid lg:grid-cols-2 mt-[40px]">
+            <div className="grid lg:grid-cols-2 mt-[30px]">
                 <div className="left w-[90%] flex items-stretch justify-start gap-2 flex-col">
                     <InputStepForm id="property_name" labelName="Nom du logement" type="text" val={propertyName} handleChange={(e)=>setPropertyName(e.target.value)}/>
                     <InputStepForm id="property_type" labelName="type de logement" type="text" val={propertyType} handleChange={(e)=>setPropertyType(e.target.value)}/>
                     <InputStepForm id="property_price" labelName="tarif annuel du logement" type="text" val={propertyPrice} handleChange={(e)=>setPropertyPrice(e.target.value)}/>
                 </div>
                 <div className="right w-[90%] flex items-stretch justify-start gap-2 flex-col">
-                    <InputStepForm id="property_region" labelName="Région" type="text" val={propertyRegion} handleChange={(e)=>setPropertyRegion(e.target.value)}/>
-                    <InputStepForm id="property_university" labelName="Université" type="text" val={propertyUniversity} handleChange={(e)=>setPropertyUniversity(e.target.value)}/>
+                    <div className="flex items-stretch relative text-[15px] gap-1 flex-col my-2 justify-center w-full" ref={inputRef2}>
+                        <label htmlFor="universtiy" className="text-(--title-color)">Régions</label>
+                        <SearchInput2 val={propertyRegion} parentChange={(val) => setPropertyRegion(val)} id="Régions" handleInputFocus={handleRegionOnFocusInputFocus} showSuggestions={showRegionSuggestion} data={['Littoral', 'Centre', 'Extrème-Nord', 'Nord']}/>
+                    </div>
+                    
+                    <div className="flex items-stretch relative text-[15px] gap-1 flex-col my-2 justify-center w-full" ref={inputRef}>
+                        <label htmlFor="universtiy" className="text-(--title-color)">Université</label>
+                        <SearchInput2 val={propertyUniversity} parentChange={(val) => setPropertyUniversity(val)} id="universtiy" handleInputFocus={handleCountryInputFocus} showSuggestions={showCountriesSuggestion} data={['UIT-Douala', 'Essec-Douala', 'ENS-Douala', 'ENSET']}/>
+                    </div>
+
                     <div className="flex items-stretch text-[15px] gap-1 flex-col my-2 justify-center w-full">
                         <label htmlFor="actif" className={propertyLoc ? "text-sm text-(--primary-green)" : "text-sm"}>Possibilité de collocation:  {propertyLoc ? "oui" : "non"}</label>
                         <input type="checkbox" id="actif" checked={propertyLoc} onChange={toggleLoc} />
                     </div>
                 </div>
             </div>
+
+        {propertyType === 'immeuble' && (
+          <div className="mt-4">
+            <label className="text-(--title-color) text-[15px]">Noms des appartements</label>
+            <div className="flex items-center gap-2 mt-2">
+              <input
+                type="text"
+                className="w-full p-2 border border-(--light-green) rounded-md"
+                placeholder="Entrer le nom de l'appartement"
+                value={nouveauNomAppartement}
+                onChange={handleNouveauNomAppartementChange}
+              />
+              <button
+                type="button"
+                className="p-2 text-green-500 hover:text-green-700"
+                onClick={handleAjouterAppartement}
+              >
+                <i className="fa-solid fa-plus"></i>
+              </button>
+            </div>
+                {nomsAppartements.length > 0 && (
+                <div className="mt-2">
+                    {nomsAppartements.map((nom, index) => (
+                    <div key={index} className="flex items-center gap-2 py-1">
+                        <span className="text-sm">{nom}</span>
+                        <button
+                        type="button"
+                        className="p-1 text-red-500 hover:text-red-700"
+                        onClick={() => handleSupprimerAppartement(index)}
+                        >
+                        <i className="fa-solid fa-minus"></i>
+                        </button>
+                    </div>
+                    ))}
+                </div>
+                )}
+            </div>
+            )}
             <div className="mt-2 text-[15px] w-[95%] flex items-stretch justify-start gap-2 flex-col">
-                <label htmlFor="property_description" className="text-(--title-color)">Description du logement</label>
+                <label htmlFor="property_description" className="text-(--title-color2)">Description du logement</label>
                 <textarea name="property_description" value={propertyDescription} onChange={(e) => setPropertyDescription(e.target.value)} className="w-full p-2 border border-(--light-green)" id="property_description" rows={4} style={{resize: "none"}}>
                 </textarea>
             </div>
         </div>
 
-        <div className="flex items-center justify-end mt-8 w-[90%] mx-auto">
+        <div className="flex items-center justify-end mt-3 w-[90%] mx-auto pe-[65px]">
             <Button handleClick={handleClick}>
                 Suivant
                 <i className="fa-solid fa-arrow-right"></i>
@@ -362,7 +490,7 @@ export function StepTwo({currentPage, prevStep, nextStep})
             <div className="title text-[18px]">
                 plus détails sur le logement 
             </div>
-            <div className="mt-[40px] mb-3">
+            <div className="mt-[30px] mb-3">
                 <div className=" flex flex-col items-stretch justify-start gap-4">
                     <div className=" bg-[#f5f5f5] flex items-center justify-between gap-2 p-2 w-[98%] ">
                         <div className="flex items-center justify-center gap-8" >
@@ -476,7 +604,7 @@ export function StepThree({currentPage, prevStep, nextStep})
 
             </div>
         </div>
-        <div className="flex items-center justify-between w-[80%]  mx-auto mt-8">
+        <div className="flex items-center justify-between w-[80%]  mx-auto mt-4">
             <StrokeButton handleClick={handleClick}>
                 <i className="fa-solid fa-arrow-left"></i>
                 Précédent
@@ -552,7 +680,7 @@ export function StepFour({currentPage, prevStep, nextStep, formData})
                     choisissez au plus 05 tags qui décrivent le le mieux to votre logement
             </span>
             </div>
-            <div className="mt-[40px] ">
+            <div className="mt-[30px] ">
                 {choosed.length <=0 ?  <div className="choosed">
 
                 </div> : <div className="choosed my-5 flex items-center justify-start gap-2 flex-wrap">
@@ -564,7 +692,7 @@ export function StepFour({currentPage, prevStep, nextStep, formData})
                 </div>
             </div>
 
-            <div className="mt-[40px]">
+            <div className="mt-[30px]">
                 <div className="text-[18px]">
                     Autres atouts de votre logements
                 </div>
@@ -585,7 +713,7 @@ export function StepFour({currentPage, prevStep, nextStep, formData})
             </div>
                 </div>
             </div>
-            <div className="title mt-[40px] text-[18px] flex mb-2  items-stretch justify-start gap-1">
+            <div className="title mt-[30px] text-[18px] flex mb-2  items-stretch justify-start gap-1">
                 <span>Autorisé l'affiliation</span> 
             </div>
 
@@ -613,7 +741,7 @@ export function StepFour({currentPage, prevStep, nextStep, formData})
             </div>            
         </div>
 
-        <div className="flex items-center justify-between w-[80%] mx-auto mt-6">
+        <div className="flex items-center justify-between w-[80%] mx-auto mt-4">
             <StrokeButton handleClick={handlePrev}>
                 <i className="fa-solid fa-arrow-left"></i>
                 Précédent
@@ -758,7 +886,7 @@ const ImageUploader = ({ currentPage, formData, nextStep, prevStep }) => {
                     </div>
                 </div>
             </div>
-            <div className="flex items-center justify-between w-[80%] mx-auto mt-6">
+            <div className="flex items-center justify-between w-[80%] mx-auto mt-4">
                 <StrokeButton handleClick={handlePrev}>
                     <i className="fa-solid fa-arrow-left"></i>
                     Précédent

@@ -1,14 +1,31 @@
+import { useEffect, useState } from "react";
 import { UpdateRenter } from "../../containers/modals.jsx/UpdateRenter";
 import { useAuth } from "../../hooks/useAuth";
 import { useModal } from "../../hooks/useModal";
-
+import { useHandleUser } from "../../hooks/useUser";
 
 export function Profile()
 {
 
-    const {user} = useAuth()
-    const {openModal} = useModal()
+const {user} = useAuth()
+const {openModal} = useModal()
+const {updateProfileImgage} = useHandleUser()
 
+const [newUser, setNewUser] = useState(user)
+
+
+const [image, setImage] = useState('')
+const [imageFile, setImageFile] = useState(null)
+
+const handleImageChange = (event) => {
+    if (event.target.files && event.target.files.length > 0) {
+        const file = event.target.files[0]
+        setImage(URL.createObjectURL(file))
+        setImageFile(file)
+    }
+
+
+};
 
 return <div className="relative w-full h-[362px] inside hidden md:block z-30" >
     <div className="absolute w-full h-full bg-(--profile-bg)">
@@ -86,47 +103,62 @@ return <div className="relative w-full h-[362px] inside hidden md:block z-30" >
                         </div>
                     </div>
                 </div>
-                <div className="flex flex-col items-end justify-start"> 
-                    <div className="h-[60%] w-[60%] bg-white mt-[10px] rounded-2xl" style={{boxShadow: '0 0 7px rgba(0, 0, 0, .25)'}}>
-                        <div className="relative flex items-center justify-center">
-                            <img src={user.image ?? "http://localhost:5173/images/team2.jpg"} width={110} height={110} className="rounded-full absolute" alt="" />
-                        </div>
-                        <div className="mt-[90px] px-[50px] flex items-center justify-between text-[15px]">
-                            <span className="text-[16px]">
-                                Compte
-                            </span>
-                            <span className="px-8 py-2 text-[15px] rounded-3xl text-(--primary-green) bg-[#F5F5F5]">
-                                actif
-                            </span>
-                        </div>
-                        <div className="mt-[30px] px-[30px] flex items-center justify-between text-[15px]">
-                            <div className="text-[16px] flex items-center justify-center gap-6">
-                                <span>
-                                    <i className="fa-solid fa-bell text-2xl text-(--primary-green)"></i>
+                <form action="" onSubmit={(e) => updateProfileImgage(e, imageFile)}>                
+                    <div className="flex flex-col items-end justify-start"> 
+                        <div className="h-[60%] w-[60%] bg-white mt-[10px] rounded-2xl" style={{boxShadow: '0 0 7px rgba(0, 0, 0, .25)'}}>
+                            <div className="relative flex items-center justify-center">
+                                <img src={image ? image : user.image ? `http://localhost:8000/storage/${user.image}` : "http://localhost:5173/images/team2.jpg"} width={130} height={130} className="rounded-full size-30 absolute object-fit" alt="" />
+                                <div className="absolute flex items-end top-2 justify-end w-[50%]">
+                                    <input onChange={handleImageChange} type="file" id="image"  accept="jpg/png/jpeg" name="image" className="opacity-0" />
+                                    <label htmlFor="image">
+                                        <i className="fa-solid fa-camera text-xl" style={{color: "#28b446"}}></i>
+                                    </label>
+                                </div>
+                            </div>
+                            <div className="mt-[90px] px-[50px] flex items-center justify-between text-[15px]">
+                                <span className="text-[16px]">
+                                    Compte
                                 </span>
-                                <span>
-                                    Notification reçues
+                                <span className="px-8 py-2 text-[15px] rounded-3xl text-(--primary-green) bg-[#F5F5F5]">
+                                    actif
                                 </span>
                             </div>
-                            <span className="text-2xl">
-                                35
-                            </span>
-                        </div>
-                        <div className="mt-[30px] px-[30px] flex items-center justify-between text-[15px]">
-                            <div className="text-[16px] flex items-center justify-center gap-6">
-                                <span>
-                                    <i className="fa-solid fa-heart text-2xl text-(--primary-green)"></i>
-                                </span>
-                                <span>
-                                    Logements favories
+                            <div className="mt-[30px] px-[30px] flex items-center justify-between text-[15px]">
+                                <div className="text-[16px] flex items-center justify-center gap-6">
+                                    <span>
+                                        <i className="fa-solid fa-bell text-2xl text-(--primary-green)"></i>
+                                    </span>
+                                    <span>
+                                        Notification reçues
+                                    </span>
+                                </div>
+                                <span className="text-2xl">
+                                    35
                                 </span>
                             </div>
-                            <span className="text-2xl">
-                                04
-                            </span>
+                            <div className="mt-[30px] px-[30px] flex items-center justify-between text-[15px]">
+                                <div className="text-[16px] flex items-center justify-center gap-6">
+                                    <span>
+                                        <i className="fa-solid fa-heart text-2xl text-(--primary-green)"></i>
+                                    </span>
+                                    <span>
+                                        Logements favories
+                                    </span>
+                                </div>
+                                <span className="text-2xl">
+                                    04
+                                </span>
+                            </div>
+                            {image &&
+                                <div className="my-[15px] flex items-center justify-center">
+                                    <button type="submit" className="bg-(--primary-green) p-3 text-sm rounded-2xl text-white">
+                                        Enregistrer l'image
+                                    </button>
+                                </div>
+                            }
                         </div>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
     </div>

@@ -50,8 +50,35 @@ export const HandleUserProvider = ({ children }) => {
         }
     }
 
+    const updateProfileImgage = async (e, imageFile) => {
+
+        const formData = new FormData();
+        formData.append('image', imageFile);
+        e.preventDefault()
+        console.log(imageFile)
+
+        try {
+            const response = await axios.post(`/api/update-profile-image`, formData, {
+                headers:{
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+                if (response.status === 200) {
+                    setUser(response.data);
+                    console.log('Utilisateur mis à jour avec succès', response.data);
+                } else {
+                    console.error('Erreur lors de la mise à jour de l\'utilisateur', response.statusText);
+                }
+            } catch (error) {
+                console.error('Erreur lors de la mise à jour de l\'utilisateur', error);
+            }
+
+    }      
+
+            
+
     return (
-        <HandleUser.Provider value={{updateUser}}>
+        <HandleUser.Provider value={{updateUser, updateProfileImgage}}>
             {children}
         </HandleUser.Provider>
     )

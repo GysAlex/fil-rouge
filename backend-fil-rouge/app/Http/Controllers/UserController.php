@@ -8,6 +8,7 @@ use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Gate;
 use App\Http\Requests\UserUpdateRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller implements HasMiddleware
 {
@@ -44,6 +45,7 @@ class UserController extends Controller implements HasMiddleware
      */
     public function update(UserUpdateRequest $request)
     {
+
         $fields = $request->validated();
 
         $user = Auth::user();

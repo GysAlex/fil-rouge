@@ -3,7 +3,7 @@ import ImageUploader, { StepOne } from "../../components/stepForm/Steps";
 import { StepTwo } from "../../components/stepForm/Steps";  
 import { StepThree } from "../../components/stepForm/Steps";
 import { StepFour } from "../../components/stepForm/Steps";
-import "../../stepForm.css"
+import "../../stepForm.css";
 import { ProgressBar } from "../../components/ProgressBar";
 
 export function NewHome() {
@@ -34,7 +34,7 @@ export function NewHome() {
     return  <div className="max-w-[1258px]  px-[75px] xl:px-0 mx-auto lg:px-[60px] pt-[33px] flex flex-col items-stretch justify-start">
         <span className="text-(--primary-green)">Ajouter un logements</span>
         <div className="flex items-stretch flex-col justify-start gap-4 mt-12">
-            <div>
+            <div className="mt-10">
                 <ProgressBar currentStep={currentStep} totalSteps={4} />
             </div>
             <form action="" className="mb-10" onSubmit={handleSubmit}>

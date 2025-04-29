@@ -7,6 +7,8 @@ import { Renter } from './containers/Renter'
 import { Profile } from './pages/renter/Proflle'
 import { Owner } from './containers/Owner'
 import { NewHome } from './pages/owner/NewHome'
+import { NotificationClient } from './pages/renter/NotificationClient'
+import { Favoris } from './pages/renter/Favoris'
 
 const router = createBrowserRouter([
 	{
@@ -30,6 +32,14 @@ const router = createBrowserRouter([
 			{
 				path:"profile",
 				element: <Profile />
+			},
+			{
+				path:"notificationclient",
+				element: <NotificationClient />
+			},
+			{
+				path:"favoris",
+				element: <Favoris />
 			}
 		]
 	},
@@ -47,7 +57,7 @@ const router = createBrowserRouter([
 				element: <NewHome />
 			}
 		]
-	}	
+	}
 ])
 
 function App() {
