@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\PropertyTags;
+use App\Models\PropertyTag;
 use App\Http\Requests\StorePropertyTagsRequest;
 use App\Http\Requests\UpdatePropertyTagsRequest;
 
@@ -13,7 +13,7 @@ class PropertyTagsController extends Controller
      */
     public function index()
     {
-        $propertyTags = PropertyTags::all();
+        $propertyTags = PropertyTag::all();
         return response()->json($propertyTags);
     }
 
@@ -28,7 +28,7 @@ class PropertyTagsController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(PropertyTags $propertyTags)
+    public function show(PropertyTag $propertyTag)
     {
         //
     }
@@ -36,7 +36,7 @@ class PropertyTagsController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdatePropertyTagsRequest $request, PropertyTags $propertyTags)
+    public function update(UpdatePropertyTagsRequest $request, PropertyTag $propertyTags)
     {
         //
     }
@@ -44,7 +44,7 @@ class PropertyTagsController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(PropertyTags $propertyTags)
+    public function destroy(PropertyTags $propertyTag)
     {
         //
     }

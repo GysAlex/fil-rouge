@@ -3,16 +3,16 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Asset;
 
-class AssetController extends Controller
+class Asset extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return Asset::all();
+        $assets = Asset::all();
+        return response()->json($assets);
     }
 
     /**

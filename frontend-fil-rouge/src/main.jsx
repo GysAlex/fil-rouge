@@ -11,26 +11,29 @@ import { HandleUserProvider } from './hooks/useUser.jsx';
 import { LocationInfoProvider } from './hooks/useLocation.jsx';
 import { TagsProvider } from './hooks/useTags.jsx';
 import { AssetProvider } from './hooks/useAsset.jsx';
+import { PropertyProvider } from './hooks/useProperty.jsx';
 
 
 
 createRoot(document.getElementById('root')).render(
 
   <LocationInfoProvider>
-    <AssetProvider>
-      <TagsProvider>
-        <AuthContextProvider>
-          <HandleUserProvider>
-            <HandleSibeBarProvider>
-              <ModalProvider>
-                <StrictMode>
-                  <App />
-                </StrictMode>
-              </ModalProvider>
-            </HandleSibeBarProvider>
-          </HandleUserProvider>
-        </AuthContextProvider>
-      </TagsProvider>
-    </AssetProvider>
+    <PropertyProvider>
+      <AssetProvider>
+        <TagsProvider>
+          <AuthContextProvider>
+            <HandleUserProvider>
+              <HandleSibeBarProvider>
+                <ModalProvider>
+                  <StrictMode>
+                    <App />
+                  </StrictMode>
+                </ModalProvider>
+              </HandleSibeBarProvider>
+            </HandleUserProvider>
+          </AuthContextProvider>
+        </TagsProvider>
+      </AssetProvider>
+    </PropertyProvider>
   </LocationInfoProvider>
 )

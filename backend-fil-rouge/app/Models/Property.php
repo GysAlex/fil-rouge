@@ -6,8 +6,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Asset;
 use App\Models\University;
-use App\Models\PropertyTags;
-use App\Models\PropertyImage;
+use App\Models\PropertyTag;
+use App\Models\Image;
+use App\Models\Contract;
 
 class Property extends Model
 {
@@ -18,12 +19,11 @@ class Property extends Model
         'property_name',
         'property_description',
         'property_price',
-        'property_quarter',
-        'property_town',
+        'property_region',
         'nombre_chambres',
         'nombre_cuisine',
         'nombre_salon',
-        'nombre_douche',
+        'nombre_douches',
         'type',
         'university_id'
     ];
@@ -35,7 +35,7 @@ class Property extends Model
 
     public function tags()
     {
-        return $this->belongsToMany(PropertyTags::class);
+        return $this->belongsToMany(PropertyTag::class);
     }
 
     public function assets()
@@ -43,8 +43,15 @@ class Property extends Model
         return $this->belongsToMany(Asset::class);
     }
 
+
     public function images()
     {
-        return $this->hasMany(PropertyImage::class);
+        return $this->hasMany(Image::class);
+    }
+
+    
+    public function contracts()
+    {
+        return $this->HasMany(Contract::class);
     }
 }

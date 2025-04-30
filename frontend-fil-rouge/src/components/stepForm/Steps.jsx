@@ -5,6 +5,7 @@ import { ChoicesTag, ChoosedTag } from "../Tags"
 import { SearchInput2 } from "../SearchInput";
 import { useLocation } from "../../hooks/useLocation";
 import { useTags } from "../../hooks/useTags";
+import { useAsset } from "../../hooks/useAsset";
 
 const initialAtoutsFromDB = [
     { id: 1, label: 'Sécurité 24/24' },
@@ -169,6 +170,7 @@ export function StepOne({nextStep, formData, currentPage})
     }
 
     const toggleLoc = ()=>{
+        console.log(propertyLoc)
         setPropertyLoc(!propertyLoc)
     }
     return <div className={ currentPage == 1 ? "h-[85%] active" : "h-[85%]"}>
@@ -675,7 +677,7 @@ export function StepFour({currentPage, prevStep, nextStep, formData})
 
     const {availableTags, addTag, removeTag, selectedTags} = useTags()
 
-    const [selectedAtouts, setSelectedAtouts] = useState(formData.selectedAtouts || []);
+    const {selectedAssets, availableAssets, toggleAsset, isAssetSelected} = useAsset()
 
     const handleAtoutChange = (event) => {
         const { name, checked } = event.target;
@@ -691,7 +693,7 @@ export function StepFour({currentPage, prevStep, nextStep, formData})
     };
 
     const handleNext = () => {
-        nextStep({choosed, selectedAtouts });
+        nextStep({selectedTags, selectedAssets });
     };
 
 
@@ -704,7 +706,7 @@ export function StepFour({currentPage, prevStep, nextStep, formData})
             </span>
             </div>
             <div className="mt-[30px] ">
-                {selectedTags.length <=0 ?  <div className="choosed">
+                {selectedTags.length <= 0 ?  <div className="choosed">
 
                 </div> : <div className="choosed my-5 flex items-center justify-start gap-2 flex-wrap">
                         {selectedTags.map((val, index) => (<ChoosedTag handleClick={()=>removeTag(val)} key={index}>{val.tag_name}</ChoosedTag>))}
@@ -721,16 +723,16 @@ export function StepFour({currentPage, prevStep, nextStep, formData})
                 </div>
                 <div className="flex items-center justify-start flex-wrap gap-5 mt-2">
                 <div className="flex items-center justify-start flex-wrap gap-5 mt-2">
-                {initialAtoutsFromDB.map(atout => (
+                {availableAssets.map(atout => (
                     <div key={atout.id} className="atout text-(--text-color) flex items-center justify-start gap-1.5">
                         <input
                             type="checkbox"
                             name={atout.id} 
                             id={`atout-${atout.id}`}
-                            checked={selectedAtouts.includes(atout.id)}
-                            onChange={handleAtoutChange}
+                            checked={isAssetSelected(atout.id)}
+                            onChange={()=> toggleAsset(atout)}
                         />
-                        <label htmlFor={`atout-${atout.id}`}>{atout.label}</label>
+                        <label htmlFor={`atout-${atout.id}`}>{atout.asset_name}</label>
                     </div>
                 ))}
             </div>

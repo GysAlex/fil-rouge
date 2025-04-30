@@ -9,6 +9,7 @@ use App\Http\Controllers\RegionController;
 use App\Http\Controllers\PropertyController;
 use App\Http\Controllers\PropertyTagsController;
 use App\Http\Controllers\AssetController;
+use App\Http\Controllers\OwnerController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -27,3 +28,12 @@ Route::apiResource('regions', RegionController::class);
 Route::apiResource('properties', PropertyController::class);
 Route::apiResource('property-tags', PropertyTagsController::class);
 Route::apiResource('assets', AssetController::class);
+
+
+/* Owner routes */
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/owner/dashboard', [OwnerController::class, 'getDashboardData']);
+    Route::put('/owner/properties/{property}/status', [OwnerController::class, 'updatePropertyStatus']);
+    Route::get('/owner/search/properties', [OwnerController::class, 'searchProperties']);
+    Route::get('/owner/search/tenants', [OwnerController::class, 'searchTenants']);
+});

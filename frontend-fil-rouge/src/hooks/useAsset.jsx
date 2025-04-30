@@ -14,7 +14,8 @@ export function AssetProvider({ children }) {
         setLoading(true);
         try {
             const response = await axios.get('/api/assets');
-            setAvailableAssets(response.data.assets);
+            setAvailableAssets(response.data);
+            console.log(response.data)
             setError(null);
         } catch (error) {
             setError(error.message);
@@ -35,6 +36,7 @@ export function AssetProvider({ children }) {
         } else {
             setSelectedAssets([...selectedAssets, asset]);
         }
+        console.log(selectedAssets)
     };
 
     // Check if asset is selected

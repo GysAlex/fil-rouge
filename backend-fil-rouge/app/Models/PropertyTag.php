@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Property;
 
-class PropertyTags extends Model
+class PropertyTag extends Model
 {
     /** @use HasFactory<\Database\Factories\PropertyTagsFactory> */
     use HasFactory;

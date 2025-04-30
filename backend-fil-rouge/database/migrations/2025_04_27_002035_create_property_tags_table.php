@@ -17,7 +17,7 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('property_tag_property', function (Blueprint $table) {
+        Schema::create('property_property_tag', function (Blueprint $table) {
             $table->foreignId('property_id')->constrained()->onDelete('cascade');
             $table->foreignId('property_tag_id')->constrained()->onDelete('cascade');
             $table->primary(['property_id', 'property_tag_id']);

@@ -1,15 +1,18 @@
 import { useEffect, useState } from "react";
 import ImageUploader, { StepOne } from "../../components/stepForm/Steps";
 import { StepTwo } from "../../components/stepForm/Steps";  
-import { StepThree } from "../../components/stepForm/Steps";
 import { StepFour } from "../../components/stepForm/Steps";
 import "../../stepForm.css";
 import { ProgressBar } from "../../components/ProgressBar";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useProperty } from "../../hooks/useProperty";
 
 export function NewHome() {
     const [currentStep, setCurrentStep] = useState(1)
     const [formData, setFormData] = useState({})
+
+    const navigate = useNavigate()
+    
     const totalSteps = 4; 
 
     const nextStep = (data) => {
@@ -22,15 +25,20 @@ export function NewHome() {
         setCurrentStep(prevStep => prevStep - 1)
     }
 
-    useEffect(() => {
-        console.log('formData mis à jour :', formData);
-    }, [formData]); 
+    const { createProperty, loading, error } = useProperty();
 
-    const handleSubmit = (e) => {
-        e.preventDefault()
-        console.log('Données du formulaire soumises :', formData)
-        alert('Formulaire soumis !')
-    }
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        
+        try {
+            await createProperty(formData);
+            // Redirection ou notification de succès
+            navigate('/owner/dashboardadmin');
+        } catch (err) {
+            // Gestion des erreurs
+            console.error(err);
+        }
+    };
 
     return  <div className="max-w-[1258px]  px-[75px] xl:px-0 mx-auto lg:px-[60px] pt-[33px] flex flex-col items-stretch justify-start">
         <span className="text-(--primary-green)">Ajouter un logements</span>

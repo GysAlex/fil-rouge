@@ -6,8 +6,8 @@ use App\Http\Controllers\FacebookRenterAuthController;
 use App\Http\Controllers\AuthController;
 use App\Models\Region;
 use App\Models\University;
-use App\Models\PropertyTags;
 use App\Models\Asset;
+use App\Models\Role;
 
 
 Route::get('/', function () {
@@ -52,22 +52,20 @@ Route::get('/auth/facebook/callback', [
 ])->name('facebook.callback');
 
 
-// Route::get('/university', function () {
-//     $region = Region::where('region_name', 'yaounde')->first();
+// Route::get('/roles', function () {
 
-//     University::create([
-//         'universitie_name' => 'ENS de yaounde',
-//         'region_id' => $region->id
-//     ]);
 
-//     return "Ca marche !";
+//     $region = Role::create(['name' => 'admin']);
+
+//     return $region;
 // });
 
 
-// Route::get('/createAsset', function () {
+// Route::get('/test', function () {
 
-//     $tag = Asset::create([
-//         'asset_name' => "Lieux de détente à proximité"
-//     ]);
-//     return $tag;
+//     $region = Region::where('region_name', 'Littoral')->first();
+    
+//     dd($region);
+
+//     return $region;
 // });
