@@ -33,7 +33,7 @@ export function NewHome() {
         try {
             await createProperty(formData);
             // Redirection ou notification de succès
-            navigate('/owner/dashboardadmin');
+            navigate('/owner/dashboard');
         } catch (err) {
             // Gestion des erreurs
             console.error(err);
@@ -42,7 +42,7 @@ export function NewHome() {
 
     return  <div className="max-w-[1258px]  px-[75px] xl:px-0 mx-auto lg:px-[60px] pt-[33px] flex flex-col items-stretch justify-start">
         <span className="text-(--primary-green)">Ajouter un logements</span>
-        <Link to="/owner/dashboardadmin" className="p-2.5 h-[44px] w-fit mt-3 rounded-4xl cursor-pointer text-white bg-(--primary-green) flex items-center justify-center gap-3">
+        <Link to="/owner/dashboard" className="p-2.5 h-[44px] w-fit mt-3 rounded-4xl cursor-pointer text-white bg-(--primary-green) flex items-center justify-center gap-3">
             <i className="fa-solid fa-arrow-left"></i>
             <span>retour</span>
         </Link>

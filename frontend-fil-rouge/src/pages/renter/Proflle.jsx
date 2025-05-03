@@ -27,23 +27,23 @@ const handleImageChange = (event) => {
 
 };
 
-return <div className="relative w-full h-[362px] inside hidden md:block z-30" >
+return <div className="relative w-full h-[362px] inside md:block z-30" >
     <div className="absolute w-full h-full bg-(--profile-bg)">
         <div className="max-w-[1258px] mx-auto px-[60px] pt-[33px] flex flex-col items-stretch justify-start">
-            <div className="text-white text-[18px]">
+            <div className="text-white text-[18px] w-[90%] mx-auto">
                 Profile de l'utilisateur
             </div>
-            <div className="text-white text-[32px] font-medium mt-[30px]">
+            <div className="text-white text-[32px] w-[90%] mx-auto font-medium mt-[30px]">
                 Bienvenu(e) {user.name} 
             </div>
-            <div className="text-white text-[14px] lg:w-[40%] ">
+            <div className="text-white text-[14px] lg:w-[40%] w-[90%] mx-auto ">
                 Ceci est votre profile utilisateur, profiter des avantages
                 unique offert part MetchApp
             </div>
-            <button onClick={()=>openModal(UpdateRenter, user)} className="mt-[45px] h-[51px] cursor-pointer text-(--primary-green) grid place-items-center font-medium bg-white w-[259px] rounded-2xl">
+            <button onClick={()=>openModal(UpdateRenter, user)} className="mt-[45px] h-[51px] cursor-pointer text-(--primary-green) grid place-items-center font-medium bg-white w-[259px] md:ms-[0px] ms-[30px] rounded-2xl">
                 modifer mes infomations 
             </button>
-            <div className="grid grid-cols-2 w-full mb-6">
+            <div className="grid lg:grid-cols-2 grid-cols-1 mx-auto w-full md:w-[90%] mb-6">
                 <div className="mt-[15px]" style={{boxShadow: '0 0 7px rgba(0, 0, 0, .25)'}}>
                     <div className="flex flex-col items-stretch justify-start">
                         <div className="bg-[#fafafa] w-full p-[24px] rounded-tl-2xl rounded-tr-2xl">
@@ -56,7 +56,7 @@ return <div className="relative w-full h-[362px] inside hidden md:block z-30" >
                             </div>
                             <button className="bg-(--primary-green) cursor-pointer text-[14px] text-white px-3 py-2 rounded-2xl">Changer de mot de passe</button>
                         </div>
-                        <div className="mt-[45px] text-[#003700] px-[30px]">
+                        <div className="mt-[45px] text-[#003700] px-[30px] ">
                             Informations personnelles
                         </div>
                         <div className="grid lg:grid-cols-2 gap-x-8 px-[30px] mt-[15px]">

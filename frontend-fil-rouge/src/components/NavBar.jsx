@@ -3,6 +3,7 @@ import { SearchBar } from "./SearchBar";
 import { useModal } from "../hooks/useModal";
 import { SearchModal } from "../containers/modals.jsx/SearchModal";
 import { useAuth } from "../hooks/useAuth";
+import { OwnerLoginModal } from "../containers/modals.jsx/OwnerLoginModal";
 
 
 export function NavBar()
@@ -41,6 +42,9 @@ export function NavBar()
 
 export function HomeNavBar()
 {
+
+    const {openModal} = useModal()
+
     return <div className="w-full h-[89px] sticky top-0 bg-white z-50 hidden md:flex items-center justify-center" style={{boxShadow: "0px 5px 10px rgba(0, 0, 0, 0.05)"}}>
     <div className="w-full max-w-[1258px] px-4 md:px-2 lg:px-0 mx-auto flex items-center justify-between">
         <div className="brand mx-2 md:mx-0 flex items-center justify-start gap-[15px]">
@@ -59,7 +63,7 @@ export function HomeNavBar()
                 <Link className="n-item font-medium text[14px] text-(--primary-green)">Logements</Link>
                 <Link className="n-item font-medium text[14px] ">Affiliations</Link>
             </div>
-            <button className="ownerButton hidden lg:flex cursor-pointer text-[14px] px-2 gap-2 font-medium  items-center justify-center w-full max-w-[285px] h-[40px]  bg-(--primary-green)">
+            <button onClick={()=> openModal(OwnerLoginModal)} className="ownerButton hidden lg:flex cursor-pointer text-[14px] px-2 gap-2 font-medium  items-center justify-center w-full max-w-[285px] h-[40px]  bg-(--primary-green)">
                 <i className="fa-solid fa-plus text-white"></i>
                 <span className="text-white">Ajouter mon logement sur metch</span>
             </button>
@@ -87,7 +91,7 @@ export function HomeSmaller()
         </div>
         <div className="flex items-center justify-center gap-[30px]"> 
             <div id="modalSearch" className="modalSearch flex pe-8 rounded-4xl items-center bg-(--light-green) justify-start w-fit h-[53px]">
-                <button onClick={() => openModal(SearchModal, )} className="w-full h-full px-8 lg:px-15 cursor-pointer flex items-center justify-around">
+                <button onClick={() => openModal(SearchModal)} className="w-full h-full px-8 lg:px-15 cursor-pointer flex items-center justify-around">
                     <div className="text-[18px]  ">Rechercher maintement</div>
                 </button>
             </div>

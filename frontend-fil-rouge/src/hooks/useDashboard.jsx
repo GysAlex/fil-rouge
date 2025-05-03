@@ -28,6 +28,7 @@ export function DashboardProvider({ children }) {
         try {
             const response = await axios.get('/api/owner/dashboard');
             setDashboardData(response.data);
+            console.log(response.data.logements)
             setError(null);
         } catch (err) {
             setError(err.message);
@@ -46,10 +47,12 @@ export function DashboardProvider({ children }) {
                     status: showOnlyOnline ? 'online' : undefined
                 }
             });
+            console.log(response.data)
             setDashboardData(prev => ({
                 ...prev,
                 logements: response.data
             }));
+            console.log(dashboardData)
         } catch (err) {
             console.error('Erreur lors de la recherche:', err);
         }
@@ -73,6 +76,16 @@ export function DashboardProvider({ children }) {
         }
     };
 
+    // Mise à jour du statut d'un contrat
+    const updateContractStatus = async (contractId, newStatus) => {
+        try {
+            await axios.put(`/api/owner/contracts/${contractId}/status`, { status: newStatus });
+            await fetchDashboardData(); // Rafraîchir les données après mise à jour
+        } catch (err) {
+            console.error('Erreur lors de la mise à jour du statut du contrat:', err);
+        }
+    };
+
     // Mise à jour du statut d'un logement
     const updatePropertyStatus = async (propertyId, status) => {
         try {
@@ -88,9 +101,9 @@ export function DashboardProvider({ children }) {
     }, []);
 
     useEffect(() => {
-        if (logementSearchTerm || showOnlyOnline) {
-            searchProperties();
-        }
+
+        searchProperties()
+        
     }, [logementSearchTerm, showOnlyOnline]);
 
     useEffect(() => {
@@ -111,6 +124,7 @@ export function DashboardProvider({ children }) {
         setShowOnlyOnline,
         selectedFilter,
         setSelectedFilter,
+        updateContractStatus,
         updatePropertyStatus,
         refreshData: fetchDashboardData
     };

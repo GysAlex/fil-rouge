@@ -11,6 +11,10 @@ import { NotificationClient } from './pages/renter/NotificationClient'
 import { Favoris } from './pages/renter/Favoris'
 import { DashboardAdmin } from './pages/owner/DashboardAdmin'
 import { StatistiqueLogement } from './pages/owner/StatistiqueLogement'
+import { DashboardProvider } from './hooks/useDashboard'
+import VerificationPage from './pages/VerificationPage'
+import { OwnerRegister } from './pages/OwnerRegister'
+import { OwnerProvider } from './hooks/useOwner'
 
 const router = createBrowserRouter([
 	{
@@ -21,12 +25,25 @@ const router = createBrowserRouter([
 				path: "/detail/1",
 				element: <Detail/>
 			},
+
 		]
 	},
+
+	{
+		path: "/confirmer",
+		element: <VerificationPage />
+	}, 
+	
+	{
+		path: "/owner/register",
+		element: <OwnerProvider> <OwnerRegister/>  </OwnerProvider>
+	},
+
 	{
 		path: "/home",
-		element: <Home/>
+		element:<OwnerProvider>  <Home/>  </OwnerProvider>
 	},
+	
 	{
 		path: "/renter",
 		element: <Renter />,
@@ -49,20 +66,20 @@ const router = createBrowserRouter([
 	},
 	{
 		path: "/owner",
-		element: <Owner />,
+		element: <DashboardProvider> <Owner /> </DashboardProvider> ,
 		children:[
 			{
 				path:"profile",
 				element: <Profile />
 			},
-
+			
 			{
 				path:"new-home",
 				element: <NewHome />
 			},
 
 			{
-				path:"dashboardadmin",
+				path:"dashboard",
 				element: <DashboardAdmin />
 			},
 			{

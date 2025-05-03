@@ -223,6 +223,12 @@ select:open::picker-icon {
 	margin-top: 100px;
 }
 
+.modal .ajustContract
+{
+	margin-top: 40px;
+}
+
+
 .modal.show form
 {
 	transform: translateX(0);
@@ -237,7 +243,7 @@ select:open::picker-icon {
 {
 	height: calc(100dvh - 89px);
 	background-color: #fafafa;
-	z-index: 200;
+	z-index: 99;
 	width: 60px;
 	transition: all ease .4s;
 

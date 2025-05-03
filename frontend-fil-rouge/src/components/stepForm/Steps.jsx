@@ -52,6 +52,7 @@ export function StepOne({nextStep, formData, currentPage})
         if (propertyRegion) {
             const universitiesList = getUniversitiesByRegion(propertyRegion);
             setUniversities(universitiesList);
+            console.log(universitiesList)
             setPropertyUniversity(universitiesList[0]?.universitie_name || ''); // Mettre à jour la valeur par défaut de l'université
         }
 
@@ -85,7 +86,7 @@ export function StepOne({nextStep, formData, currentPage})
     };
 
     const handleUniversityInputFocus = () => {
-    setShowUniversitiesSuggestion(true); // Afficher les suggestions au focus
+        setShowUniversitiesSuggestion(true); // Afficher les suggestions au focus
     };
 
     /* Handle Second suggestion */
@@ -174,7 +175,7 @@ export function StepOne({nextStep, formData, currentPage})
         setPropertyLoc(!propertyLoc)
     }
     return <div className={ currentPage == 1 ? "h-[85%] active" : "h-[85%]"}>
-        <div className="h-[95%] w-[95%] overflow-y-auto px-2 pe-2">
+        <div className="h-[95%] mx-auto w-[95%] mt-5 overflow-y-auto px-2 pe-2">
             <div className="title text-[18px]">
                 Informations de base 
             </div>
@@ -195,7 +196,7 @@ export function StepOne({nextStep, formData, currentPage})
                     
                     <div className="flex items-stretch relative text-[15px] gap-1 flex-col my-2 justify-center w-full" ref={inputRef}>
                         <label htmlFor="universtiy" className="text-(--title-color)">Université</label>
-                        <SearchInput2 val={propertyUniversity} parentChange={(val) => setPropertyUniversity(val)} id="universtiy" handleInputFocus={handleCountryInputFocus} showSuggestions={showCountriesSuggestion} data={universities.map((un) => {
+                        <SearchInput2 val={propertyUniversity} parentChange={(val) => setPropertyUniversity(val)} id="universtiy" handleInputFocus={handleUniversityInputFocus} showSuggestions={showUniversitiesSuggestion} data={universities.map((un) => {
                             return un.universitie_name
                         })}/>
                     </div>
@@ -538,7 +539,7 @@ export function StepTwo({currentPage, prevStep, nextStep})
 
 
     return <div div className={ currentPage == 2 ? "active" : ""}>
-        <div className="h-[95%] w-[95%]  overflow-y-auto px-2 pe-2">
+        <div className="h-[95%] mx-auto w-[95%] mt-5 overflow-y-auto px-2 pe-2">
             <div className="title text-[18px]">
                 plus détails sur le logement 
             </div>
@@ -698,7 +699,7 @@ export function StepFour({currentPage, prevStep, nextStep, formData})
 
 
     return <div className={ currentPage == 4 ? "h-[85%] active" : "h-[85%]"}>
-        <div className="h-[95%] w-[95%]  overflow-y-auto px-2 pe-2">
+        <div className="h-[95%] mx-auto w-[95%] mt-5 overflow-y-auto px-2 pe-2">
             <div className="title text-[18px] flex flex-col items-stretch justify-start gap-1">
             <span>Ajouter les tags à votre logement</span> 
             <span className="text-[15px] text-(--text-color)">
@@ -835,7 +836,7 @@ const ImageUploader = ({ currentPage, formData, nextStep, prevStep }) => {
 
     return (
         <div className={`step  h-[85%] ${currentPage === 3 ? "active" : ""}`}>
-            <div className="h-[95%] overflow-y-auto px-2 pe-2">
+            <div className="h-[95%] mx-auto w-[95%] mt-5 overflow-y-auto px-2 pe-2">
                 <div className="flex flex-col gap-6">
                     <div className="w-[95%]">
                         <div className="text-[18px] text-(--title-color) mb-2"> Ajouter des images à votre logement</div>

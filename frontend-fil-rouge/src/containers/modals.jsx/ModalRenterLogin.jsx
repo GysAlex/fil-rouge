@@ -5,12 +5,19 @@ import { useState } from "react"
 export function ModalRenterLogin()
 {
 const [loading, setLoading] = useState(false)
+const [loading2, setLoading2] = useState(false)
 
 const handleClick = () => {
     setLoading(true)
     window.open("http://localhost:8000/auth/google/redirect", "_self") 
+}
+
+const handleClick2 = () => {
+    setLoading2(true)
+    window.open("http://localhost:8000/auth/facebook/redirect", "_self") 
 
 }
+
 const {closeModal} = useModal()
 
 return <form  className="lg:w-[735px] flex flex-col ajust items-stretch gap-6 md:w-[70%] w-[80%] bg-white  p-4 rounded-xl" style={{boxShadow: "1px 5px 10px rgba(0, 0, 0, .2)"}} >
@@ -33,8 +40,8 @@ return <form  className="lg:w-[735px] flex flex-col ajust items-stretch gap-6 md
                 <span className="text-(--livre)">Continuer avec google</span> 
             </button>
 
-            <button type="button" onClick={handleClick} href="" className="facebook cursor-pointer  flex items-center justify-center gap-3 h-[55px]  rounded-2xl" style={{border: "solid 2px #1876f266"}}>
-               <img src="../src/assets/i-facebook.svg" width={40} height={40} alt="" />
+            <button type="button" onClick={handleClick2} href="" className="facebook cursor-pointer  flex items-center justify-center gap-3 h-[55px]  rounded-2xl" style={{border: "solid 2px #1876f266"}}>
+            {!loading2 ? <img src="../src/assets/i-facebook.svg" width={40} height={40} alt="" /> : <i className="fa-solid fa-spinner animate-spin text-2xl" style={{color: "#43609c"}} />}
                 <span className="text-(--livre2)">Continuer avec facebook</span>
             </button>
 
