@@ -14,8 +14,10 @@ class FacebookRenterAuthController extends Controller
     public function handlefacebookCallback()
     {
 
-        $facebookUser = Socialite::driver('google')->user()->user;
+        $facebookUser = Socialite::driver('facebook')->user()->user;
         
+        dd($facebookUser);
+
         $userData = [
             'name' => $facebookUser['given_name'],
             'family_name' => $facebookUser['family_name'],

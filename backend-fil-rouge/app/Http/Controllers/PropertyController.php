@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Region;
 use App\Models\University;
+use Illuminate\Support\Facades\Auth;
 
 class PropertyController extends Controller
 {
@@ -30,6 +31,8 @@ class PropertyController extends Controller
     {
         DB::beginTransaction();
 
+        $user = Auth::user();
+
         $property = Property::create([
             'property_name' => $request->property_name,
             'property_description' => $request->property_description,
@@ -39,6 +42,7 @@ class PropertyController extends Controller
             'nombre_cuisine' => $request->nombre_cuisine,
             'nombre_salon' => $request->nombre_salon,
             'nombre_douches' => $request->nombre_douches,
+            'user_id' => $user->id,
             'type' => $request->type,
             'university_id' => University::where('universitie_name', $request->university_id)->first()->id
         ]);

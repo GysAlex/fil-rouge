@@ -3,12 +3,14 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\GoogleRenterAuthController;
 use App\Http\Controllers\FacebookRenterAuthController;
+use App\Http\Controllers\GoogleOwnerHandleController;
 use App\Http\Controllers\AuthController;
 use App\Models\Region;
 use App\Models\University;
 use App\Models\Asset;
 use App\Models\Role;
-
+use App\Models\User;
+use App\Models\Contract;
 
 Route::get('/', function () {
     return view('welcome');
@@ -52,6 +54,9 @@ Route::get('/auth/facebook/callback', [
 ])->name('facebook.callback');
 
 
+Route::get('/auth/google/owner/redirect', [GoogleOwnerHandleController::class, 'redirectToGoogle'])->name('google.owner.redirect');
+Route::get('/auth/google/owner/callback', [GoogleOwnerHandleController::class, 'handleGoogleCallback'])->name('google.owner.callback');
+
 // Route::get('/roles', function () {
 
 
@@ -61,11 +66,14 @@ Route::get('/auth/facebook/callback', [
 // });
 
 
-// Route::get('/test', function () {
+Route::get('/test', function () {
 
-//     $region = Region::where('region_name', 'Littoral')->first();
-    
-//     dd($region);
+    $owner = auth()->user();
+    $contrats = Contract::with('property', 'user')
+    ->whereHas('property', function ($query) use ($owner) {
+        $query->where('user_id', $owner->id);
+    })
+    ->get();
 
-//     return $region;
-// });
+    return $contrats->where('statut','à_venir');
+ });

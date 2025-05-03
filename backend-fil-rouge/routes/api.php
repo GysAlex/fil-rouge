@@ -10,6 +10,10 @@ use App\Http\Controllers\PropertyController;
 use App\Http\Controllers\PropertyTagsController;
 use App\Http\Controllers\AssetController;
 use App\Http\Controllers\OwnerController;
+use App\Http\Controllers\ContractController;
+use App\Http\Controllers\OwnerLoginController;
+
+
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -36,4 +40,18 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/owner/properties/{property}/status', [OwnerController::class, 'updatePropertyStatus']);
     Route::get('/owner/search/properties', [OwnerController::class, 'searchProperties']);
     Route::get('/owner/search/tenants', [OwnerController::class, 'searchTenants']);
+});
+
+
+/*handle contracts*/
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/owner/properties/{property}/favorites', [ContractController::class, 'getFavorites']);
+    Route::post('/owner/contracts', [ContractController::class, 'store']);
+    Route::put('/owner/contracts/{contractId}/status', [ContractController::class, 'updateStatus']);
+});
+
+Route::prefix('owners')->group(function () {
+    Route::post('/register', [OwnerLoginController::class, 'registerOwner']);
+    Route::post('/login', [OwnerLoginController::class, 'loginOwner']);
+    Route::post('/confirm-email', [OwnerLoginController::class, 'confirmEmail'])->middleware('auth:sanctum');
 });

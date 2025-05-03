@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('favoris', function (Blueprint $table) {
+        Schema::create('property_user', function (Blueprint $table) {
             $table->foreignIdFor(User::class)->constrained()->onDelete('CASCADE');
             $table->foreignIdFor(Property::class)->constrained()->onDelete('CASCADE');
             $table->timestamps();

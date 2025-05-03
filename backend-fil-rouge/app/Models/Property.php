@@ -9,6 +9,7 @@ use App\Models\University;
 use App\Models\PropertyTag;
 use App\Models\Image;
 use App\Models\Contract;
+use App\Models\Property;
 
 class Property extends Model
 {
@@ -24,6 +25,7 @@ class Property extends Model
         'nombre_cuisine',
         'nombre_salon',
         'nombre_douches',
+        'user_id',
         'type',
         'university_id'
     ];
@@ -53,5 +55,10 @@ class Property extends Model
     public function contracts()
     {
         return $this->HasMany(Contract::class);
+    }
+
+    public function favoritedByUsers()
+    {
+        return $this->belongsToMany(User::class, 'property_user', 'property_id', 'user_id');
     }
 }
