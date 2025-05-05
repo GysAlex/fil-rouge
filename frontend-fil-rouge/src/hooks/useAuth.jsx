@@ -12,6 +12,8 @@ export function AuthContextProvider({children})
 {
     const [user, setUser] = useState(null)
 
+    const [role, setRole] = useState([])
+
     const [state, setUserState] = useState(undefined)
 
     const [loading, setLoading] = useState(true)
@@ -23,8 +25,11 @@ export function AuthContextProvider({children})
                 await axios.get('/sanctum/csrf-cookie');
                 const response = await axios.get('/api/user');
                 console.log(response)
+
                 if (response.status === 200) {
                     setUser(response.data);
+                    setRole(response.data.roles.map((el) => el.name))
+                    console.log(role)
                     setUserState(true);
                 } else {
                     setUserState(false);
@@ -44,7 +49,19 @@ export function AuthContextProvider({children})
     }, [])
 
 
-    return <authContext.Provider value={{user, loading, setUserState, state}}>
+    const logout = async () => {
+        try {
+            await axios.post("/api/logout"); // Appel à l'endpoint de déconnexion
+            setUser(null); 
+            setRole([]); 
+            setUserState(false); 
+        } catch (error) {
+            console.error("Erreur lors de la déconnexion", error);
+        }
+    };
+
+
+    return <authContext.Provider value={{user, setUser, loading, logout ,setUserState, state, role, setRole}}>
         {children}
     </authContext.Provider>
 }

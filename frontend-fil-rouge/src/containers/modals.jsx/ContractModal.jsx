@@ -133,12 +133,19 @@ export function ContractModal() {
     useEffect(() => {
         const fetchLogements = async () => {
             try {
-                const response = await axios.get("http://localhost:8000/api/properties");
-                setLogements(response.data);
-                console.log(response.data.map((el) => el.property_name))
-
+                const response = await axios.get("http://localhost:8000/api/owner/properties", {
+                    withCredentials: true,
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+                setLogements(response.data.data);
+    
             } catch (error) {
                 console.error("Erreur lors de la récupération des logements:", error);
+                if (error.response?.status === 401) {
+                    closeModal();
+                }
             }
         };
         fetchLogements();

@@ -10,7 +10,7 @@ export function OwnerLoginModal() {
     const { loginOwner, loading, error } = useOwner();
     const navigate = useNavigate();
 
-    const {setUserState} = useAuth()
+    const {setUserState, setRole, setUser} = useAuth()
 
     const [formData, setFormData] = useState({
         email: "",
@@ -25,9 +25,12 @@ export function OwnerLoginModal() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await loginOwner(formData);
+            const res = await loginOwner(formData);
             closeModal();
             setUserState(true)
+            setUser(res.user)
+            setRole(res.user.roles.map((el) => el.name))
+            //setRole(user.role.map((el) => el.name))
             navigate("/owner/dashboard"); // Redirige vers le tableau de bord après connexion
         } catch (err) {
             console.error("Erreur lors de la connexion :", err);

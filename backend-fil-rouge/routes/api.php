@@ -12,15 +12,18 @@ use App\Http\Controllers\AssetController;
 use App\Http\Controllers\OwnerController;
 use App\Http\Controllers\ContractController;
 use App\Http\Controllers\OwnerLoginController;
+use App\Http\Controllers\HomeController;
+
 
 
 
 Route::get('/user', function (Request $request) {
-    return $request->user();
+    return $request->user()->load('roles');
 })->middleware('auth:sanctum');
 
 Route::post('/login/google', [AuthController::class, 'loginWithGoogle']);
 Route::post('/login', [AuthController::class, 'login']);
+Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 
 
 
@@ -29,7 +32,11 @@ Route::post('/update-profile-image', [ImageController::class, 'updateProfileImag
 
 
 Route::apiResource('regions', RegionController::class);
-Route::apiResource('properties', PropertyController::class);
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::apiResource('properties', PropertyController::class); // Protéger les routes properties
+});
+
 Route::apiResource('property-tags', PropertyTagsController::class);
 Route::apiResource('assets', AssetController::class);
 
@@ -38,8 +45,10 @@ Route::apiResource('assets', AssetController::class);
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/owner/dashboard', [OwnerController::class, 'getDashboardData']);
     Route::put('/owner/properties/{property}/status', [OwnerController::class, 'updatePropertyStatus']);
+    Route::put('/properties/{property}/toggle-published', [OwnerController::class, 'togglePublished']);
     Route::get('/owner/search/properties', [OwnerController::class, 'searchProperties']);
     Route::get('/owner/search/tenants', [OwnerController::class, 'searchTenants']);
+    Route::get('/owner/properties', [OwnerController::class, 'getOwnerProperties']);
 });
 
 
@@ -55,3 +64,6 @@ Route::prefix('owners')->group(function () {
     Route::post('/login', [OwnerLoginController::class, 'loginOwner']);
     Route::post('/confirm-email', [OwnerLoginController::class, 'confirmEmail'])->middleware('auth:sanctum');
 });
+
+/*For the homepage */
+Route::get('/home', [HomeController::class, 'getUniversitiesWithProperties']);

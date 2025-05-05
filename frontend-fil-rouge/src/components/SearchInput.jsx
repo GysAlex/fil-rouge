@@ -43,7 +43,7 @@ export function SearchInput({handleInputFocus, showSuggestions, choosed, label, 
         <input type="text" value={val} onClick={handleCLick} onChange={(e) => handleChange(e)} name="country" onFocus={handleInputFocus} id="country" className={val ? "relative hasVal w-full px-[10px] rounded-xl h-[50px] border border-(--primary-green)" : "relative z-20 w-full px-[10px] rounded-xl h-[50px] border border-(--primary-green)" } />
         <label htmlFor="country" className="absolute z-10 top-[30%] left-10">{label}</label>
         {showSuggestions && choice  && <ul className="absolute bg-white top-[110%]  z-70 rounded-2xl w-full flex flex-col items-stretch justify-start text-sm" style={{boxShadow: "0 0 7px rgba(0, 0, 0, .1)" }}>
-            {filteredValues.map((val, index) => <li key={index} onClick={()=>handleChoice(val)} className="p-3 rounded-2xl">{val}</li>)}
+            {filteredValues.map((val, index) => <li key={index} onClick={()=>handleChoice(val)} className="p-3 rounded-2xl" style={{color: "black"}}>{val}</li>)}
 
         </ul> }    
     </>

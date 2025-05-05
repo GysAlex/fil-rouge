@@ -32,15 +32,19 @@ const initialTagsFromTheBD = [
 
 export function StepOne({nextStep, formData, currentPage})
 {
-    const [propertyName, setPropertyName] = useState(formData.propertyName || "")
-    const [propertyType, setPropertyType] = useState(formData.propertyType || "")
-    const [propertyRegion, setPropertyRegion] = useState(formData.propertyRegion || "")
-    const [propertyPrice, setPropertyPrice] = useState(formData.propertyPrice || "")
-    const [propertyUniversity, setPropertyUniversity] = useState(formData.propertyUniversity || "")
-    const [propertyDescription, setPropertyDescription] = useState(formData.propertyDescription || "")
-    const [propertyLoc, setPropertyLoc] = useState(formData.propertyLoc || false)
+
+    const [propertyName, setPropertyName] = useState(formData.property_name || "")
+    const [propertyType, setPropertyType] = useState(formData.type || "")
+    const [propertyRegion, setPropertyRegion] = useState(formData.property_region || "")
+    const [propertyPrice, setPropertyPrice] = useState(formData.property_price || "")
+    const [propertyDescription, setPropertyDescription] = useState(formData.property_description || "")
+    const [propertyLoc, setPropertyLoc] = useState(formData.coloc || false)
     const [nomsAppartements, setNomsAppartements] = useState(formData.nomsAppartements || []);
     const [nouveauNomAppartement, setNouveauNomAppartement] = useState('');
+    const [propertyUniversity, setPropertyUniversity] = useState("")
+
+
+    
 
 
     const [universities, setUniversities] = useState([]);
@@ -52,8 +56,7 @@ export function StepOne({nextStep, formData, currentPage})
         if (propertyRegion) {
             const universitiesList = getUniversitiesByRegion(propertyRegion);
             setUniversities(universitiesList);
-            console.log(universitiesList)
-            setPropertyUniversity(universitiesList[0]?.universitie_name || ''); // Mettre à jour la valeur par défaut de l'université
+            setPropertyUniversity(formData?.university?.universitie_name || ''); // Mettre à jour la valeur par défaut de l'université
         }
 
 
@@ -261,8 +264,36 @@ export function StepOne({nextStep, formData, currentPage})
     </div>
 }
 
-export function StepTwo({currentPage, prevStep, nextStep}) 
+export function StepTwo({currentPage, prevStep, nextStep, formData}) 
 {
+
+    console.log(formData)
+    // Initialisation des états avec les données de `formData` ou des valeurs par défaut
+    const [chambre, setChambre] = useState({
+        name: "nombre_chambres",
+        number: formData?.nombre_chambres || 0,
+        available: formData?.nombre_chambres > 0 || false,
+    });
+
+    const [salon, setSalon] = useState({
+        name: "nombre_salon",
+        number: formData?.nombre_salon || 0,
+        available: formData?.nombre_salon > 0 || false,
+    });
+
+    const [douche, setDouche] = useState({
+        name: "nombre_douche",
+        number: formData?.nombre_douches || 0,
+        available: formData?.nombre_douches > 0 || false,
+    });
+
+    const [cuisine, setCuisine] = useState({
+        name: "nombre_cuisine",
+        number: formData?.nombre_cuisine || 0,
+        available: formData?.nombre_cuisine > 0 || false,
+    });
+    
+
     const handleClick = () => {
         prevStep()
     }
@@ -511,33 +542,6 @@ export function StepTwo({currentPage, prevStep, nextStep})
             }
         }
 
-
-
-    const [chambre, setChambre] = useState({
-        name: 'chambre',
-        number: 0,
-        available: false
-    })
-    const [salon, setSalon] = useState({
-        name: 'salon',
-        number: 0,
-        available: false
-
-    })
-
-    const [douche, setDouche] = useState({
-        name: 'douche',
-        number: 0,
-        available: false
-
-    })
-    const [cuisine, setCuisine] = useState({
-        name: 'cuisine',
-        number: 0,
-        available: false
-    })
-
-
     return <div div className={ currentPage == 2 ? "active" : ""}>
         <div className="h-[95%] mx-auto w-[95%] mt-5 overflow-y-auto px-2 pe-2">
             <div className="title text-[18px]">
@@ -672,26 +676,48 @@ export function StepThree({currentPage, prevStep, nextStep})
 
 export function StepFour({currentPage, prevStep, nextStep, formData}) 
 {
+
+    const [selectedTags, setSelectedTags] = useState(formData.tags || []);
+    const [selectedAssets, setSelectedAssets] = useState(formData.assets || []);
+
+    // Pré-remplir les tags sélectionnés
+    useEffect(() => {
+        if (formData.tags) {
+            setSelectedTags(formData.tags);
+        }
+    }, [formData.tags]);
+
+    // Pré-remplir les atouts sélectionnés
+    useEffect(() => {
+        if (formData.assets) {
+            setSelectedAssets(formData.assets);
+        }
+    }, [formData.selectedAssets]);
+
+    const {availableTags, addTag, removeTag} = useTags()
+
+    const {availableAssets, toggleAsset, isAssetSelected} = useAsset()
+
+
+    const handleTagClick = (tag) => {
+        if (selectedTags.some((t) => t.id === tag.id)) {
+            setSelectedTags(selectedTags.filter((t) => t.id !== tag.id));
+        } else {
+            setSelectedTags([...selectedTags, tag]);
+        }
+    };
+
+    const handleAssetClick = (asset) => {
+        if (selectedAssets.some((a) => a.id === asset.id)) {
+            setSelectedAssets(selectedAssets.filter((a) => a.id !== asset.id));
+        } else {
+            setSelectedAssets([...selectedAssets, asset]);
+        }
+    };
+
     const handlePrev = ()=>{
         prevStep()
     }
-
-    const {availableTags, addTag, removeTag, selectedTags} = useTags()
-
-    const {selectedAssets, availableAssets, toggleAsset, isAssetSelected} = useAsset()
-
-    const handleAtoutChange = (event) => {
-        const { name, checked } = event.target;
-        const atoutId = parseInt(name, 10); // Convertir la valeur du name (string) en entier
-
-        if (checked) {
-            if (!selectedAtouts.includes(atoutId)) {
-                setSelectedAtouts([...selectedAtouts, atoutId]);
-            }
-        } else {
-            setSelectedAtouts(selectedAtouts.filter(id => id !== atoutId));
-        }
-    };
 
     const handleNext = () => {
         nextStep({selectedTags, selectedAssets });
@@ -710,11 +736,11 @@ export function StepFour({currentPage, prevStep, nextStep, formData})
                 {selectedTags.length <= 0 ?  <div className="choosed">
 
                 </div> : <div className="choosed my-5 flex items-center justify-start gap-2 flex-wrap">
-                        {selectedTags.map((val, index) => (<ChoosedTag handleClick={()=>removeTag(val)} key={index}>{val.tag_name}</ChoosedTag>))}
+                        {selectedTags.map((val, index) => (<ChoosedTag handleClick={()=>handleTagClick(val)} key={index}>{val.tag_name}</ChoosedTag>))}
                     </div>}
 
                 <div className="choices flex flex-wrap items-center justify-start gap-3">
-                    {availableTags.map((val, index) => (<ChoicesTag handleClick={()=>addTag(val)} key={index}>{val.tag_name}</ChoicesTag>))}
+                    {availableTags.map((val, index) => (<ChoicesTag handleClick={()=>handleTagClick(val)} key={index}>{val.tag_name}</ChoicesTag>))}
                 </div>
             </div>
 
@@ -730,8 +756,8 @@ export function StepFour({currentPage, prevStep, nextStep, formData})
                             type="checkbox"
                             name={atout.id} 
                             id={`atout-${atout.id}`}
-                            checked={isAssetSelected(atout.id)}
-                            onChange={()=> toggleAsset(atout)}
+                            checked={selectedAssets.some((a) => a.id === atout.id)}
+                            onChange={()=> handleAssetClick(atout)}
                         />
                         <label htmlFor={`atout-${atout.id}`}>{atout.asset_name}</label>
                     </div>
@@ -773,8 +799,7 @@ export function StepFour({currentPage, prevStep, nextStep, formData})
                 Précédent
             </StrokeButton>
             <Button type="submit" handleClick={handleNext}>
-                Suivant
-                <i className="fa-solid fa-arrow-right"></i>
+                Terminer la modification
             </Button>
         </div>
 
@@ -783,8 +808,15 @@ export function StepFour({currentPage, prevStep, nextStep, formData})
 
 
 const ImageUploader = ({ currentPage, formData, nextStep, prevStep }) => {
-    const [mainImage, setMainImage] = useState(formData.mainImage || null);
-    const [secondaryImages, setSecondaryImages] = useState(formData.secondaryImages || []);
+
+    const [mainImage, setMainImage] = useState(formData.images?.filter(el => el.is_main == 1).map(al => "http://localhost:8000/storage/" + al.image_path) || null); // Image principale
+    const [secondaryImages, setSecondaryImages] = useState(
+        formData.images?.filter((el)=> el.is_main != 1).map((image, index) => ({
+            id: `secondary-${index}`,
+            url: "http://localhost:8000/storage/" + image.image_path,
+        })) || []
+    );
+
     const [mainImageFile, setMainImageFile] = useState(formData.mainImageFile || null);
     const [secondaryImageFiles, setSecondaryImageFiles] = useState(formData.secondaryImageFiles || {});
 

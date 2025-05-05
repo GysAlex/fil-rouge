@@ -24,6 +24,7 @@ class OwnerController extends Controller
             ->map(function ($property) {
                 return [
                     'id'              => $property->id,
+                    'published'       => $property->published,
                     'nom'             => $property->property_name,
                     'dateCreation'    => $property->created_at->format('d M Y'),
                     'locataires_count'=> $property->contracts->count(), // nombre total de contrats = locataires associés
@@ -93,10 +94,9 @@ class OwnerController extends Controller
             $properties->where('property_name', 'like', "%{$request->search}%");
         }
 
-        if ($request->status) {
-            $properties->where('statut', $request->status);
+        if ($request->published) {
+            $properties->where('published', $request->published);
         }
-
 
         return $properties
         ->with(['images', 'contracts.user' ])
@@ -107,7 +107,7 @@ class OwnerController extends Controller
                 'nom'             => $property->property_name,
                 'dateCreation'    => $property->created_at->format('d M Y'),
                 'locataires_count'=> $property->contracts->count(), // nombre total de contrats = locataires associés
-                'status'          => $property->status ?? 'non défini',
+                'published'       => $property->published ?? 'non défini',
                 'image'           => $property->images->where('is_main', true)->first()?->image_path ?? null,
             ];
         });
@@ -142,5 +142,50 @@ class OwnerController extends Controller
         }
     
         return $query->with('contracts')->get();
+    }
+
+    public function togglePublished(Request $request, Property $property)
+    {
+        // Vérifier que l'utilisateur authentifié est bien le propriétaire du logement
+        $ownerId = Auth::id();
+        if ($property->user_id !== $ownerId) {
+            return response()->json(['error' => 'Vous n\'êtes pas autorisé à effectuer cette action.'], 403);
+        }
+
+        // Basculer l'état de publication
+        $property->published = !$property->published;
+        $property->save();
+
+        return response()->json([
+            'message' => $property->published ? 'Logement publié avec succès.' : 'Logement dépublié avec succès.',
+            'published' => $property->published,
+        ]);
+    }
+
+    public function getOwnerProperties()
+    {
+        try {
+            $owner_id = Auth::id();
+            
+            $properties = Property::where('user_id', $owner_id)
+                ->where('published', true)
+                ->with(['images' => function($query) {
+                    $query->where('is_main', true);
+                }])
+                ->get();
+    
+            return response()->json([
+                'status' => 'success',
+                'data' => $properties
+            ]);
+        } catch (\Exception $e) {
+            \Log::error('Erreur récupération propriétés: ' . $e->getMessage());
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Erreur lors de la récupération des propriétés',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    
     }
 }

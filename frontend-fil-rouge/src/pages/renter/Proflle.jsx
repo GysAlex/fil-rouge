@@ -30,20 +30,20 @@ const handleImageChange = (event) => {
 return <div className="relative w-full h-[362px] inside md:block z-30" >
     <div className="absolute w-full h-full bg-(--profile-bg)">
         <div className="max-w-[1258px] mx-auto px-[60px] pt-[33px] flex flex-col items-stretch justify-start">
-            <div className="text-white text-[18px] w-[90%] mx-auto">
+            <div className="text-white text-[18px] ">
                 Profile de l'utilisateur
             </div>
-            <div className="text-white text-[32px] w-[90%] mx-auto font-medium mt-[30px]">
+            <div className="text-white text-[32px] font-medium mt-[30px]">
                 Bienvenu(e) {user.name} 
             </div>
-            <div className="text-white text-[14px] lg:w-[40%] w-[90%] mx-auto ">
+            <div className="text-white text-[14px] lg:w-[40%]">
                 Ceci est votre profile utilisateur, profiter des avantages
                 unique offert part MetchApp
             </div>
-            <button onClick={()=>openModal(UpdateRenter, user)} className="mt-[45px] h-[51px] cursor-pointer text-(--primary-green) grid place-items-center font-medium bg-white w-[259px] md:ms-[0px] ms-[30px] rounded-2xl">
+            <button onClick={()=>openModal(UpdateRenter, user)} className="mt-[45px] h-[51px] cursor-pointer text-(--primary-green) grid place-items-center font-medium bg-white w-[259px] rounded-2xl">
                 modifer mes infomations 
             </button>
-            <div className="grid lg:grid-cols-2 grid-cols-1 mx-auto w-full md:w-[90%] mb-6">
+            <div className="grid lg:grid-cols-2 grid-cols-1 w-full  mb-6">
                 <div className="mt-[15px]" style={{boxShadow: '0 0 7px rgba(0, 0, 0, .25)'}}>
                     <div className="flex flex-col items-stretch justify-start">
                         <div className="bg-[#fafafa] w-full p-[24px] rounded-tl-2xl rounded-tr-2xl">
@@ -104,8 +104,8 @@ return <div className="relative w-full h-[362px] inside md:block z-30" >
                     </div>
                 </div>
                 <form action="" onSubmit={(e) => updateProfileImgage(e, imageFile)}>                
-                    <div className="flex flex-col items-end justify-start"> 
-                        <div className="h-[60%] w-[60%] bg-white mt-[10px] rounded-2xl" style={{boxShadow: '0 0 7px rgba(0, 0, 0, .25)'}}>
+                    <div className="flex flex-col  items-center gap md:items-end justify-start"> 
+                        <div className="h-[60%] w-[60%] bg-white md:mt-[10px] rounded-2xl" style={{boxShadow: '0 0 7px rgba(0, 0, 0, .25)'}}>
                             <div className="relative flex items-center justify-center">
                                 <img src={image ? image : user.image ? `http://localhost:8000/storage/${user.image}` : "http://localhost:5173/images/team2.jpg"} width={130} height={130} className="rounded-full size-30 absolute object-fit" alt="" />
                                 <div className="absolute flex items-end top-2 justify-end w-[50%]">
@@ -136,7 +136,7 @@ return <div className="relative w-full h-[362px] inside md:block z-30" >
                                     35
                                 </span>
                             </div>
-                            <div className="mt-[30px] px-[30px] flex items-center justify-between text-[15px]">
+                            <div className="my-[30px] px-[30px] flex items-center justify-between text-[15px]">
                                 <div className="text-[16px] flex items-center justify-center gap-6">
                                     <span>
                                         <i className="fa-solid fa-heart text-2xl text-(--primary-green)"></i>

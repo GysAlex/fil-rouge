@@ -27,7 +27,9 @@ class Property extends Model
         'nombre_douches',
         'user_id',
         'type',
-        'university_id'
+        'university_id',
+        'published',
+        'coloc'
     ];
 
     public function university()

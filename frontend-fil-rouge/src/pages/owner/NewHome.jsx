@@ -6,10 +6,14 @@ import "../../stepForm.css";
 import { ProgressBar } from "../../components/ProgressBar";
 import { Link, useNavigate } from "react-router-dom";
 import { useProperty } from "../../hooks/useProperty";
+import { useDashboard } from "../../hooks/useDashboard";
 
 export function NewHome() {
     const [currentStep, setCurrentStep] = useState(1)
     const [formData, setFormData] = useState({})
+
+
+    const {refreshData} = useDashboard()
 
     const navigate = useNavigate()
     
@@ -32,6 +36,8 @@ export function NewHome() {
         
         try {
             await createProperty(formData);
+            refreshData()
+
             // Redirection ou notification de succès
             navigate('/owner/dashboard');
         } catch (err) {

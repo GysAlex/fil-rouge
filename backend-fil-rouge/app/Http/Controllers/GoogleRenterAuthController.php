@@ -27,8 +27,14 @@ class GoogleRenterAuthController
         $user = User::where('google_id', $googleUser['id'])->first();
         
         if ($user) {
+            if (!$user->roles->contains('name', 'renter')) {
+                $user->roles()->attach(2); // Remplacez 2 par l'ID réel du rôle "renter"
+            }
+
+            // Connecter l'utilisateur
             Auth::login($user);
-            return redirect("http://localhost:5173" . '/renter/profile');
+
+            return redirect("http://localhost:5173/renter/profile");
         }
 
         $userData['password'] = bcrypt("1234");
@@ -39,6 +45,8 @@ class GoogleRenterAuthController
         if ($user->email_verified_at === null) {
             $user->update(['email_verified_at' => Carbon::now()]);
         }
+        
+        $user->roles()->attach(2); 
 
         Auth::login($user);
 

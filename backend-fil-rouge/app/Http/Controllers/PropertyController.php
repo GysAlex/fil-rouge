@@ -10,12 +10,14 @@ use Illuminate\Support\Facades\Storage;
 use App\Models\Region;
 use App\Models\University;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 
 class PropertyController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
+
     public function index()
     {
         return Property::with(['university', 'tags', 'assets', 'images'])->get();
@@ -86,72 +88,70 @@ class PropertyController extends Controller
     /**
      * Display the specified resource.
      */
-    public function update(UpdatePropertyRequest $request, Property $property)
-    {
-        DB::beginTransaction();
+    public function update(Request $request, Property $property)
+    {    
+        
+        \Log::info('Headers reçus:', $request->headers->all());
+        \Log::info('Données reçues:', $request->all());
 
-        $property->update([
-            'property_name' => $request->property_name,
-            'property_description' => $request->property_description,
-            'property_price' => $request->property_price,
-            'property_region' => Region::where('region_name', $request->property_region)->first()->id,
-            'nombre_chambres' => $request->nombre_chambres,
-            'nombre_cuisine' => $request->nombre_cuisine,
-            'nombre_salon' => $request->nombre_salon,
-            'nombre_douches' => $request->nombre_douches,
-            'type' => $request->type,
-            'university_id' => University::where('universitie_name', $request->university_id)->first()->id
-        ]);
-
-        // Mise à jour des images
-        if ($request->hasFile('secondary_images')) {
-            // Supprimer les anciennes images secondaires
-            $property->images()->where('is_main', false)->get()->each(function($image) {
-                Storage::disk('public')->delete($image->image_path);
-                $image->delete();
-            });
-
-            // Ajouter les nouvelles images secondaires
-            foreach ($request->file('secondary_images') as $image) {
-                $path = $image->store('properties', 'public');
-                $property->images()->create([
-                    'image_path' => $path
-                ]);
+        try {
+            DB::beginTransaction();
+            
+            // Récupérer l'université par son nom
+            $university = University::where('universitie_name', $request->university_name)->first();
+            $region_id = Region::where('region_name', $request->property_region)->first();
+            
+            if (!$university) {
+                return response()->json([
+                    'message' => 'Université non trouvée',
+                    'university_name' => $request->university_id
+                ], 404);
             }
-        }
-
-        if ($request->hasFile('main_image')) {
-            // Supprimer l'ancienne image principale
-            $mainImage = $property->images()->where('is_main', true)->first();
-            if ($mainImage) {
-                Storage::disk('public')->delete($mainImage->image_path);
-                $mainImage->delete();
-            }
-
-            // Ajouter la nouvelle image principale
-            $path = $request->file('main_image')->store('properties', 'public');
-            $property->images()->create([
-                'image_path' => $path,
-                'is_main' => true
+    
+            // Mise à jour des champs de base
+            $property->update([
+                'property_name' => $request->property_name,
+                'type' => $request->type,
+                'property_price' => $request->property_price,
+                'property_description' => $request->property_description,
+                'nombre_chambres' => $request->nombre_chambres,
+                'nombre_cuisine' => $request->nombre_cuisine,
+                'nombre_salon' => $request->nombre_salon,
+                'nombre_douches' => $request->nombre_douches,
+                'property_loc' => $request->property_loc,
+                'property_region' => $region_id->id,
+                'university_id' => $university->id
             ]);
+    
+            // Mise à jour des tags si présents
+            if ($request->has('tags')) {
+                $property->tags()->sync($request->tags);
+            }
+    
+            // Mise à jour des assets si présents
+            if ($request->has('assets')) {
+                $property->assets()->sync($request->assets);
+            }
+            
+    
+            DB::commit();
+            
+            return response()->json([
+                'message' => 'Propriété mise à jour avec succès',
+                'property' => $property->load(['university', 'tags', 'assets']) // Charger toutes les relations
+            ]);
+    
+        } catch (\Exception $e) {
+            DB::rollBack();
+            \Log::error('Erreur mise à jour: ' . $e->getMessage());
+            \Log::error('Stack trace: ' . $e->getTraceAsString());
+            
+            return response()->json([
+                'message' => 'Une erreur est survenue lors de la mise à jour',
+                'error' => $e->getMessage()
+            ], 500);
         }
 
-        // Mise à jour des tags
-        if ($request->has('tags')) {
-            $property->tags()->sync($request->tags);
-        }
-
-        // Mise à jour des assets
-        if ($request->has('assets')) {
-            $property->assets()->sync($request->assets);
-        }
-
-        DB::commit();
-
-        return response()->json([
-            'message' => 'Propriété mise à jour avec succès',
-            'property' => $property->load('university', 'tags', 'assets', 'images')
-        ]);
     }
 
 

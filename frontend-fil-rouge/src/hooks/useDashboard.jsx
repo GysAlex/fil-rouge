@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect } from 'react';
+import { toast } from 'sonner';
 import axios from 'axios';
 
 const DashboardContext = createContext();
@@ -21,6 +22,7 @@ export function DashboardProvider({ children }) {
     const [logementSearchTerm, setLogementSearchTerm] = useState('');
     const [locataireSearchTerm, setLocataireSearchTerm] = useState('');
     const [showOnlyOnline, setShowOnlyOnline] = useState(false);
+    const [showOnlyPublished, setShowOnlyPublished] = useState(false)
     const [selectedFilter, setSelectedFilter] = useState('Tout');
 
     const fetchDashboardData = async () => {
@@ -28,7 +30,7 @@ export function DashboardProvider({ children }) {
         try {
             const response = await axios.get('/api/owner/dashboard');
             setDashboardData(response.data);
-            console.log(response.data.logements)
+            console.log(response)
             setError(null);
         } catch (err) {
             setError(err.message);
@@ -44,7 +46,7 @@ export function DashboardProvider({ children }) {
             const response = await axios.get('/api/owner/search/properties', {
                 params: {
                     search: logementSearchTerm,
-                    status: showOnlyOnline ? 'online' : undefined
+                    published: showOnlyPublished ? '1' : '0'
                 }
             });
             console.log(response.data)
@@ -76,6 +78,33 @@ export function DashboardProvider({ children }) {
         }
     };
 
+
+    const togglePropertyPublished = async (propertyId) => {
+        try {
+            const response = await axios.put(`/api/properties/${propertyId}/toggle-published`);
+            const updatedProperty = response.data;
+
+            // Mettre à jour les données locales
+            setDashboardData((prev) => ({
+                ...prev,
+                logements: prev.logements.map((logement) =>
+                    logement.id === propertyId ? updatedProperty : logement
+                ),
+            }));
+
+            await fetchDashboardData(); // Rafraîchir les données après mise à jour
+            // Afficher un toast de succès
+            toast.success(
+                updatedProperty.published
+                    ? "Le logement a été publié avec succès !"
+                    : "Le logement a été dépublié avec succès !"
+            );
+        } catch (err) {
+            console.error("Erreur lors de la mise à jour du statut 'published':", err);
+            toast.error("Une erreur est survenue lors de la mise à jour du statut.");
+        }
+    };
+
     // Mise à jour du statut d'un contrat
     const updateContractStatus = async (contractId, newStatus) => {
         try {
@@ -86,15 +115,6 @@ export function DashboardProvider({ children }) {
         }
     };
 
-    // Mise à jour du statut d'un logement
-    const updatePropertyStatus = async (propertyId, status) => {
-        try {
-            await axios.put(`/api/owner/properties/${propertyId}/status`, { status });
-            await fetchDashboardData(); // Rafraîchir les données
-        } catch (err) {
-            console.error('Erreur lors de la mise à jour:', err);
-        }
-    };
 
     useEffect(() => {
         fetchDashboardData();
@@ -104,7 +124,7 @@ export function DashboardProvider({ children }) {
 
         searchProperties()
         
-    }, [logementSearchTerm, showOnlyOnline]);
+    }, [logementSearchTerm, showOnlyPublished]);
 
     useEffect(() => {
         if (locataireSearchTerm || selectedFilter !== 'Tout') {
@@ -122,10 +142,12 @@ export function DashboardProvider({ children }) {
         setLocataireSearchTerm,
         showOnlyOnline,
         setShowOnlyOnline,
+        showOnlyPublished, 
+        setShowOnlyPublished,
         selectedFilter,
         setSelectedFilter,
         updateContractStatus,
-        updatePropertyStatus,
+        togglePropertyPublished,
         refreshData: fetchDashboardData
     };
 

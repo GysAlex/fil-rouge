@@ -3,10 +3,11 @@ import { useAuth } from "../../hooks/useAuth";
 import { useModal } from "../../hooks/useModal";
 import { useHandleUser } from "../../hooks/useUser";
 import { UpdateOwner } from "../../containers/modals.jsx/UpdateOwner";
+import { Toaster } from "sonner";
 
 export function Profile() {
     const { user } = useAuth();
-    const { openModal } = useModal();
+    const { openModal, closeModal } = useModal();
     const { updateProfileImgage } = useHandleUser();
 
     const [newUser, setNewUser] = useState(user);
@@ -22,6 +23,8 @@ export function Profile() {
     };
 
     return (
+        <>
+        <Toaster />
         <div className="relative w-full h-[362px] inside hidden md:block z-30">
             <div className="absolute w-full h-full bg-(--profile-bg)">
                 <div className="max-w-[1258px] mx-auto px-[60px] pt-[33px] flex flex-col items-stretch justify-start">
@@ -143,5 +146,5 @@ export function Profile() {
                 </div>
             </div>
         </div>
-    );
+    </>);
 }

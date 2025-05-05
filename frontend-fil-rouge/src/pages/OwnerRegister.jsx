@@ -20,7 +20,7 @@ export function OwnerRegister() {
 
     const nav = useNavigate()
 
-    const {setUserState} = useAuth()
+    const {setUserState, setRole, setUser} = useAuth()
 
     const {registerOwner, sendVerificationCode} = useOwner()
 
@@ -30,12 +30,14 @@ export function OwnerRegister() {
         if (currentPage === 1) {
             try {
                 setUserState(false)
-                await registerOwner({
+                const user = await registerOwner({
                     name: data.firstName,
                     password: data.password,
                     phone_number: data.phoneNumber,
                     email: data.email,
                 });
+                setRole(user.role.map(el => el.name))
+                setUser(user)
                 toast.success("Informations de base enregistrées avec succès !");
                 setCurrentPage(2);
                 

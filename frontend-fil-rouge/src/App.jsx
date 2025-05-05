@@ -15,6 +15,8 @@ import { DashboardProvider } from './hooks/useDashboard'
 import VerificationPage from './pages/VerificationPage'
 import { OwnerRegister } from './pages/OwnerRegister'
 import { OwnerProvider } from './hooks/useOwner'
+import { EditProperty } from './pages/owner/EditProperty'
+import { PropertyDetails } from './pages/owner/PropertyDetails'
 
 const router = createBrowserRouter([
 	{
@@ -43,7 +45,7 @@ const router = createBrowserRouter([
 		path: "/home",
 		element:<OwnerProvider>  <Home/>  </OwnerProvider>
 	},
-	
+
 	{
 		path: "/renter",
 		element: <Renter />,
@@ -83,8 +85,16 @@ const router = createBrowserRouter([
 				element: <DashboardAdmin />
 			},
 			{
+				path:"edit-property/:id",
+				element: <EditProperty />
+			},
+			{
 				path:"statistiquelogement",
 				element: <StatistiqueLogement />
+			},
+			{
+				path: "detail-property/:id",
+				element: <PropertyDetails />
 			}
 		]
 	}
