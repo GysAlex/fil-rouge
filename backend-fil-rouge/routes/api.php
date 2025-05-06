@@ -15,6 +15,7 @@ use App\Http\Controllers\OwnerLoginController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PropertyDetailsController;
 use App\Http\Controllers\PropertyDetailsPublicController;
+use App\Http\Controllers\SearchController;
 
 
 
@@ -78,3 +79,5 @@ Route::middleware('auth:sanctum')->group(function () {
 
 /*This is the route for details */
 Route::get('/properties/{id}/details', [PropertyDetailsPublicController::class, 'getPropertyDetails']);
+
+Route::get('/properties/search/{university}', [SearchController::class, 'getAllProperties']);
