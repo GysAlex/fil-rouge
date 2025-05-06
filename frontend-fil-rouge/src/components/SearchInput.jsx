@@ -1,4 +1,4 @@
-import { use, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 
 export function SearchInput({handleInputFocus, showSuggestions, choosed, label, data=null})
 {
@@ -29,13 +29,142 @@ export function SearchInput({handleInputFocus, showSuggestions, choosed, label, 
         setChoice(true)
     }
 
+    const handleChange = (e)=>{
+        
+        if(newC)
+        {
+            setNewC(false)
+        }
+        setVal(e.target.value)
+    }
+
+
     return <>
-        <input type="text" value={val} onClick={handleCLick} onChange={(e) => setVal(e.target.value)} name="country" onFocus={handleInputFocus} id="country" className={val ? "relative hasVal w-[210px] px-[10px] rounded-xl h-[50px] border border-(--primary-green)" : "relative z-40 w-[210px] px-[10px] rounded-xl h-[50px] border border-(--primary-green)" } />
+        <input type="text" value={val} onClick={handleCLick} onChange={(e) => handleChange(e)} name="country" onFocus={handleInputFocus} id="country" className={val ? "relative hasVal w-full px-[10px] rounded-xl h-[50px] border border-(--primary-green)" : "relative z-20 w-full px-[10px] rounded-xl h-[50px] border border-(--primary-green)" } />
         <label htmlFor="country" className="absolute z-10 top-[30%] left-10">{label}</label>
-        {showSuggestions && choice  && <ul className="absolute bg-(--light-green) top-[110%]  z-10 rounded-2xl w-full flex flex-col items-stretch justify-start text-sm" style={{boxShadow: "0 0 7px rgba(0, 0, 0, .1)", zIndex: "9999" }}>
-            {filteredValues.map((val, index) => <li key={index} onClick={()=>handleChoice(val)} className="p-3 rounded-2xl z-40">{val}</li>)}
+        {showSuggestions && choice  && <ul className="absolute bg-white top-[110%]  z-70 rounded-2xl w-full flex flex-col items-stretch justify-start text-sm" style={{boxShadow: "0 0 7px rgba(0, 0, 0, .1)" }}>
+            {filteredValues.map((val, index) => <li key={index} onClick={()=>handleChoice(val)} className="p-3 rounded-2xl" style={{color: "black"}}>{val}</li>)}
 
         </ul> }    
     </>
 
+}
+
+export function SearchInput2({handleInputFocus, val, parentChange, showSuggestions, id, data=null})
+{
+    const [values, setValues] = useState(data)
+    const [newC, setNewC] = useState(false)
+
+
+    const [choice, setChoice] = useState(true)
+
+
+    useEffect(()=>{
+        setValues(data || [])
+    }, [data])
+
+    
+    const filteredValues  = !newC ? values.filter((suggestion) =>
+        suggestion?.toLowerCase().includes(val?.toLowerCase())
+      ) : values;
+
+    const handleChoice = (val) =>{
+        parentChange(val)
+        setChoice(false)
+        setNewC(false)
+    }
+
+    const handleCLick = ()=>{
+        setNewC(true)
+        setChoice(true)
+    }
+
+    const handleChange = (e)=>{
+        
+        if(newC)
+        {
+            setNewC(false)
+        }
+        parentChange(e.target.value)
+    }
+
+
+    return <>
+        <input type="text" value={val || ''} onClick={handleCLick} onChange={(e) => handleChange(e)} name={id} onFocus={handleInputFocus} id={id} className="relative  w-full px-[10px] h-[40px] border border-(--light-green2)"  />
+        {showSuggestions && choice  && values?.length > 0 && <ul className="absolute bg-white top-[110%]  z-70 rounded-2xl w-full flex flex-col items-stretch justify-start text-sm" style={{boxShadow: "0 0 7px rgba(0, 0, 0, .1)" }}>
+            {filteredValues.map((val, index) => <li key={index} onClick={()=>handleChoice(val)} className="p-3 cursor-pointer rounded-2xl transition-all ease-in duration-300 hover:bg-(--light-green2)">{val}</li>)}
+
+        </ul> }    
+    </>
+}
+
+export function SearchInput3({handleInputFocus, val, parentChange, showSuggestions, id, label, data=null}) {
+    const [values, setValues] = useState(data);
+    const [newC, setNewC] = useState(false);
+    const [choice, setChoice] = useState(true);
+
+    useEffect(() => {
+        setValues(data || []);
+    }, [data]);
+
+    const filteredValues = !newC ? values.filter((suggestion) =>
+        suggestion?.toLowerCase().includes(val?.toLowerCase())
+    ) : values;
+
+    const handleChoice = (val) => {
+        parentChange(val);
+        setChoice(false);
+        setNewC(false);
+    };
+
+    const handleCLick = () => {
+        setNewC(true);
+        setChoice(true);
+    };
+
+    const handleChange = (e) => {
+        if(newC) {
+            setNewC(false);
+        }
+        parentChange(e.target.value);
+    };
+
+    return <div className="spec">
+            <input 
+                type="text" 
+                value={val || ''} 
+                onClick={handleCLick} 
+                onChange={(e) => handleChange(e)} 
+                name={id} 
+                onFocus={handleInputFocus} 
+                id={id} 
+                className={val ? 
+                    "hasVal relative w-full px-[10px] rounded-xl h-[50px] border border-(--primary-green)" : 
+                    "relative z-20 w-full px-[10px] rounded-xl h-[50px] border border-(--primary-green)"
+                } 
+            />
+            <label 
+                htmlFor={id} 
+                className={`absolute z-10 transition-all duration-200 ${
+                    val ? 'top-[-10px] left-3 text-xs bg-white px-1' : 'top-[30%] left-10'
+                }`}
+            >
+                {label}
+            </label>
+            {showSuggestions && choice && values?.length > 0 && (
+                <ul className="absolute bg-white top-[110%] z-70 rounded-2xl w-full flex flex-col items-stretch justify-start text-sm" 
+                    style={{boxShadow: "0 0 7px rgba(0, 0, 0, .1)"}}>
+                    {filteredValues.map((val, index) => (
+                        <li 
+                            key={index} 
+                            onClick={() => handleChoice(val)} 
+                            style={{color: "#263238"}}
+                            className="p-3 cursor-pointer rounded-2xl transition-all ease-in duration-300 hover:bg-(--light-green2)"
+                        >
+                            {val}
+                        </li>
+                    ))}
+                </ul>
+            )}
+    </div>;
 }

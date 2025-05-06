@@ -5,12 +5,35 @@ import App from './App.jsx'
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { ModalProvider } from './hooks/useModal.jsx';
+import { HandleSibeBarProvider } from './hooks/useSideBar.jsx';
+import { AuthContextProvider } from './hooks/useAuth.jsx';
+import { HandleUserProvider } from './hooks/useUser.jsx';
+import { LocationInfoProvider } from './hooks/useLocation.jsx';
+import { TagsProvider } from './hooks/useTags.jsx';
+import { AssetProvider } from './hooks/useAsset.jsx';
+import { PropertyProvider } from './hooks/useProperty.jsx';
+
+
 
 createRoot(document.getElementById('root')).render(
-  <ModalProvider>
-    <StrictMode>
-      <App />
-    </StrictMode>
-  </ModalProvider>
 
+  <LocationInfoProvider>
+    <PropertyProvider>
+      <AssetProvider>
+        <TagsProvider>
+          <AuthContextProvider>
+            <HandleUserProvider>
+              <HandleSibeBarProvider>
+                <ModalProvider>
+                  <StrictMode>
+                    <App />
+                  </StrictMode>
+                </ModalProvider>
+              </HandleSibeBarProvider>
+            </HandleUserProvider>
+          </AuthContextProvider>
+        </TagsProvider>
+      </AssetProvider>
+    </PropertyProvider>
+  </LocationInfoProvider>
 )

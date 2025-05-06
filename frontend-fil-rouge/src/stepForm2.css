@@ -1,0 +1,34 @@
+.form-container {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+}
+
+.form-container > div {
+    position: absolute;
+    display: none;
+    transition-behavior: allow-discrete;
+    transition-property: display opacity transform;
+    transition-duration: 0.5s;
+    top: 5px;
+    left: 5px;
+    opacity: 0;
+    scale: 0.6;
+}
+
+
+
+.form-container > div.active {
+    opacity: 1;
+    display: unset;
+    scale: 1;
+
+    @starting-style{
+        opacity: 0;
+        scale: 0.8;
+    }
+}
+
+
+
+/* Sty

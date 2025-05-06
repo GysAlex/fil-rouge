@@ -7,8 +7,10 @@
 :root
 {
 	--light-green: rgba(39, 174, 95, 0.41);
+	--light-green2: rgba(39, 174, 95, 0.885);
 	--primary-green: #28b446;
-	--home-bg: hsla(133, 64%, 43%, 0.60);
+	--home-bg: rgba(39, 180, 70, 0.6);
+	--profile-bg: rgba(39, 180, 70, 0.7);
 	--search-shadow: hsla(133, 64%, 43%, 0.40);
 	--figma-grid: 30px;
 	--title-color: #263238;
@@ -16,6 +18,8 @@
 	--title-weight: medium;
 	--title-size: 22px;
 	--box-shadow: 0px 0px 7px rgba(0, 0, 0, 0.25);
+	--livre: #fbbd04;
+	--livre2: #1876f2;
 }
 
 
@@ -119,13 +123,13 @@ select:open::picker-icon {
 	rotate: 180deg;
 }
 
-.search input + label
+.search input + label, .searchModal input + label
 {
 	transition: all ease .4s;
 }
 
 
-.search input
+.search input, .searchModal input
 {
 	transition: all ease .3s;
 	background: url('assets/chevron-down-solid.svg') no-repeat;
@@ -134,19 +138,20 @@ select:open::picker-icon {
 	background-position-y: center ;
 }
 
-.search input:focus, .search input:hover
+.search input:focus, .search input:hover, .searchModal input:focus, .searchModal input:hover
 {
 	border: solid 2px #28b446;
 	outline: none;
 }
 
-.search input:hover + label
+.search input:hover + label, .searchModal input:hover + label
 {
 	user-select: none;
 	pointer-events: none;
 }
 
-.search input:hover + label, .search input:focus + label, .search input.hasVal + label
+.search input:hover + label, .search input:focus + label, .search input.hasVal + label,
+.searchModal input:hover + label, .searchModal input:focus + label, .searchModal input.hasVal + label
 {
 	transform: translate( -17px ,-40px);
 	scale: .8;
@@ -157,16 +162,36 @@ select:open::picker-icon {
 	padding: 4px;
 }
 
+.search input.hasVal + label, .searchModal input.hasVal + label
+{
+	transform: unset;	
+}
 
-.search ul li
+
+.searchModal input:hover + label, .searchModal input:focus + label, .searchModal input.hasVal + label
+{
+	z-index: 30;
+}
+
+.search ul li, .searchModal ul li
 {
 	transition: all ease .4s;
 	color: white;
 }
 
-.search ul li:hover
+.searchModal ul li
+{
+	color: #28B446;
+}
+
+.search ul li:hover, .searchModal ul li:hover
 {
 	background-color: #28B446;
+}
+
+.searchModal ul li:hover
+{
+	color: white;
 }
 
 
@@ -190,6 +215,7 @@ select:open::picker-icon {
 	}
 }
 
+
 .modal form
 {
 	transition-behavior: allow-discrete;
@@ -199,10 +225,271 @@ select:open::picker-icon {
 	transform: translateX(-20vw);	
 }
 
+
+.modal .ajust
+{
+	margin-top: 100px;
+}
+
+.modal .ajustContract
+{
+	margin-top: 40px;
+}
+
+
 .modal.show form
 {
 	transform: translateX(0);
 	@starting-style{
 		transform: translateX(20vh)
 	}
+}
+
+
+
+.sidebar
+{
+	height: calc(100dvh - 89px);
+	background-color: #fafafa;
+	z-index: 99;
+	width: 60px;
+	transition: all ease .4s;
+
+}
+
+
+
+
+
+.nextSide
+{
+	height: calc(100dvh - 89px);
+	overflow-y: auto;
+}
+
+.sidebar .p-burger
+{
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	width: 40px;
+	height: 3px;
+	background-color: #28B446;
+	transition: all ease .4s;
+}
+
+.sidebar .p-burger::before, .p-burger::after
+{
+	content: '';
+	position: absolute;
+	width: 40px;
+	height: 3px;
+	transition: all ease .4s;
+	background-color: #28B446;
+}
+
+.sidebar .p-burger::before
+{
+	top: -12px;
+}
+
+.sidebar .p-burger::after
+{
+	top: 12px;
+}
+
+
+.sidebar.expanded .p-burger
+{
+	background-color: transparent;
+}
+
+.sidebar.expanded .p-burger::before
+{
+	transform: rotate(45deg);
+	top: 0;
+}
+.sidebar.expanded .p-burger::after
+{
+	transform: rotate(-45deg);
+	top: 0;
+}
+
+.sidebar.expanded
+{
+	width: 250px;
+	transition: all ease .4s;
+}
+
+.sidebar.expanded button
+{
+	width: 90%;
+	margin-inline: auto;
+	padding-inline:15px ;
+}
+
+.sidebar.expanded a
+{
+	align-items: center;
+	display: flex;
+	justify-content: start;
+	gap: 20px;
+	width: 90%;
+	margin-inline: auto;
+}
+
+.sidebar a
+{
+	gap: 20px;
+	width: 100%;
+	padding-inline: 15px;
+	margin-inline: auto;
+}
+
+.sidebar a.active
+{
+	background-color: #e0e0e0;
+}
+
+
+.sidebar a span
+{
+	display: none;
+	opacity: 0;
+	transition-behavior: allow-discrete;
+	transition-property: display opacity;
+}
+
+
+.sidebar.expanded a span
+{
+	opacity: 1;
+	display: block;
+}
+
+
+
+/*Custom checkbox */
+
+#actif {
+	appearance: none;
+	position: relative;
+	display: flex;
+	align-items: center;
+	transition: all ease .4s;
+	justify-content: center;
+	width: 50px;
+	height: 30px;
+}
+
+#actif::before
+{
+	content: '';
+	position: absolute;
+	width: 40px;
+	height: 20px;
+	background-color: rgb(236, 233, 233);	
+	border-radius: 20px;
+	transition: all ease .3s;
+}
+
+#actif::after
+{
+	content: '';
+	position: absolute;
+	width: 20px;
+	height: 20px;
+	background-color: white;
+	box-shadow: 1px 5px 10px rgba(0, 0, 0, .1);
+	left: 0;
+	transition: all ease .3s;
+	border-radius: 50%;
+}
+
+#actif:checked::before
+{
+	background-color: var(--primary-green);
+}
+
+#actif:checked::after
+{
+	transform: translateX(30px);
+}
+
+
+
+/*Custom checkbox */
+.checkbox-custom {
+	appearance: none;
+	position: relative;
+	display: flex;
+	align-items: center;
+	transition: all ease .4s;
+	justify-content: center;
+	width: 50px;
+	height: 30px;
+}
+
+.checkbox-custom::before
+{
+	content: '';
+	position: absolute;
+	width: 40px;
+	height: 20px;
+	background-color: rgb(236, 233, 233);	
+	border-radius: 20px;
+	transition: all ease .3s;
+}
+
+.checkbox-custom::after
+{
+	content: '';
+	position: absolute;
+	width: 20px;
+	height: 20px;
+	background-color: white;
+	box-shadow: 1px 5px 10px rgba(0, 0, 0, .1);
+	left: 0;
+	transition: all ease .3s;
+	border-radius: 50%;
+}
+
+.checkbox-custom:checked::before
+{
+	background-color: var(--primary-green);
+}
+
+.checkbox-custom:checked::after
+{
+	transform: translateX(30px);
+}
+
+
+.atout input[type=checkbox]
+{
+	appearance: none;
+	width: 16px;
+	height: 16px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	position: relative;
+}
+
+.atout input[type=checkbox]::before
+{
+	content: '';
+	position: absolute;
+	width: 16px;
+	height: 16px;
+	border-radius: 50%;
+	transition:  all ease .4s;
+	border: solid 1px var(--primary-green)
+}
+
+.atout input[type=checkbox]:checked::before
+{
+	background-color: #28B446;
 }

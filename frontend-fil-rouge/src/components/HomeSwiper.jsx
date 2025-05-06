@@ -5,9 +5,9 @@ import { Pagination } from 'swiper/modules';
 // Import Swiper styles
 import 'swiper/css';
 import 'swiper/css/pagination';
-import { Home } from './Home';
+import { Home, HomeDyn } from './Home';
 
-function HomeSwiper()
+function HomeSwiper({properties})
 {
 
     const responsive = {
@@ -41,13 +41,11 @@ function HomeSwiper()
         focusOnSelect={true}
         renderButtonGroupOutside={true}
         >
-        <Home/>
-        <Home/>
-        <Home/>
-        <Home/>
-        <Home/>
-        <Home/>
-        <Home/>
+
+          {properties.length > 0 && properties.map((propertie) => {
+            return <HomeDyn home={propertie}/>
+          }
+        )}
         <div></div>
         <div></div>
         </Carousel>

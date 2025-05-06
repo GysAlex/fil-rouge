@@ -14,7 +14,7 @@ export const ModalProvider = ({ children }) => {
   }
 
   const closeModal = () => {
-    setModalState({ isOpen: false, content: null, props: {} });
+    setModalState({ isOpen: false, content: null, props: {} });     
   }
 
   return (

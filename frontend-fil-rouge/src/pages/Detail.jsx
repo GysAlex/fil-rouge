@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { ImageContainer } from "../components/ImageContainer";
 import { InfoProprio } from "../components/InfoProprio";
 import { Tags } from "../components/Tags";
@@ -9,11 +9,37 @@ import { Chart as ChartJS} from "chart.js/auto";
 import { Button, StrokeButton } from "../components/Button";
 import { CommentSwiper } from "../components/CommentSwiper";
 import { Home } from "../components/Home";
-
+import { useModal } from "../hooks/useModal";
+import { ModalRenterLogin } from "../containers/modals.jsx/ModalRenterLogin";
+import { ModalContainer } from "../containers/modals.jsx/ModalContainer";
+import { usePropertyPublicDetails } from "../hooks/usePropertyPublicDetails";
+import { DetailSkeleton } from "../components/DetailsSkeleton";
+import { formatCurrency } from "../components/utilities/formatCurrency";
 
 
 export function Detail()
 {
+
+    const { id } = useParams();
+    const { property, owner, university, loading, error } = usePropertyPublicDetails(id);
+
+    console.log(property)
+
+    if (loading) {
+        return <DetailSkeleton />;
+    }
+
+    if (error) {
+        return <div className="text-red-500 text-center py-8">{error}</div>;
+    }
+    const {openModal} = useModal()
+
+    const handleClick = ()=>{
+        openModal(ModalRenterLogin)
+        console.log("Bonjour")
+    }
+
+
     return <>
         <Link className="p-2.5 h-[44px] w-fit rounded-4xl cursor-pointer text-white bg-(--primary-green) flex items-center justify-center gap-3">
             <i className="fa-solid fa-arrow-left"></i>
@@ -22,7 +48,7 @@ export function Detail()
         <div className="title mt-[15px] flex items-center  justify-between">
             <div className="flex flex-col items-start justify-center">
                 <div className="up text-[26px] text-(--text-color) font-medium">
-                    Harmony City
+                    {property.property_name}
                 </div>
                 <div className="down flex justify-start items-center gap-2 ">
                     <div className="firs flex justify-start items-center gap-1">
@@ -35,7 +61,8 @@ export function Detail()
                     </div>
                 </div>
             </div>
-
+            <ModalContainer />
+            
             <div className="flex items-center justify-between sm:gap-3 gap-5">
                 <button className="fav cursor-pointer flex items-center justify-start gap-2">
                     <span className="hidden md:block">Ajouter aux favoris</span>
@@ -47,10 +74,10 @@ export function Detail()
                 </button>
             </div>
         </div>
-        <ImageContainer/>
+        <ImageContainer images={property.images} />
         <div className="moreInfo grid md:grid-cols-2 gap-[30px]">
             <div className="left">
-                <InfoProprio/>
+                <InfoProprio owner={owner} published_at={property.published_at}/>
                 <div  className="line mt-(--figma-grid) h-[2px] bg-(--primary-green) w-[90%] lg:w-full relative rounded-tr-full">
                 </div>
                 <div className="information mt-(--figma-grid) flex flex-col items-stretch justify-start gap-[30px]">
@@ -58,25 +85,10 @@ export function Detail()
                         Ce que le logement propose
                     </div>
                     <div className="atouts flex items-center justify-start flex-wrap gap-2.5">
-                        <Tags>
-                            <i className="fa-solid fa-graduation-cap text-(--primary-green)"></i>
-                            <span>Salle d'étude disponible</span>
-                        </Tags>
-                        <Tags>
-                            <i className="fa-solid fa-droplet text-(--primary-green)"></i>
-                            <span>Réserve d'eau annuelle</span>
-                        </Tags>
-                        <Tags>
-                            <i className="fa-solid fa-car text-(--primary-green)"></i>
-                            <span>Garage</span>
-                        </Tags>
-                        <Tags>
-                            <i className="fa-solid fa-location-crosshairs text-(--primary-green)"></i>
-                            <span>Très proche du campus</span>
-                        </Tags>
+                        {property.tags.length > 0 ? property.tags.map((tag) => <Tags> <i className="fa-solid fa-check text-(--primary-green)"></i>  <span>{tag.tag_name}</span> </Tags>) : <span className="text-red-300">  aucuns pour ce logement </span>}
                     </div>
                     <TextContainer>
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequatur tempore dolor facere obcaecati! Itaque tempora voluptatum quo, architecto saepe impedit dolor a voluptas, accusamus temporibus debitis enim sapiente dolore eligendi!
+                        {property.description ?? <span className="text-red-300">Ce logement ne propose aucune description</span> }
                     </TextContainer>
                 </div>
                 <div  className="line mt-(--figma-grid) h-[2px] bg-(--primary-green) w-[90%] lg:w-full  relative rounded-tr-full">
@@ -140,22 +152,22 @@ export function Detail()
                                 Studio à partir de 
                             </div>
                             <div className="price text-(--title-color) text-[20px] font-medium">
-                                150 000 FCFA par ans
+                                { formatCurrency(property.price) } ans
                             </div>
                         </div>
                         <div className="keypoints flex flex-col items-start justify-start gap-[30px]">
                             <ArrowItem>
                                 <div className="text-(--text-color) w-[70%]" style={{lineHeight: "30px"}}>Possibilité de payer en plusieurs tranches</div>
                             </ArrowItem>
-                            <ArrowItem>
+                               {property.colocation && <ArrowItem>
                                 <div className="text-(--text-color) w-[70%]" style={{lineHeight: "30px"}}>Opportunité de collocation disponible</div>
-                            </ArrowItem>
+                            </ArrowItem>}
                             <ArrowItem>
                                 <div className="text-(--text-color) w-[70%]" style={{lineHeight: "30px"}}>Prochain jour de visite <span className="font-medium">12 Octobre 2025</span></div>
                             </ArrowItem>
                         </div>
                         <div className="mt-[30px] flex items-center justify-center lg:justify-start  mb-[30px] lg:mb-0">
-                            <Button>
+                            <Button handleClick={handleClick}>
                                 je suis intéressé(é) par ce logement
                             </Button>
                         </div>

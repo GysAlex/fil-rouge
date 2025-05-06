@@ -72,15 +72,6 @@ export  function FilterScrollbarWithModal() {
     }
   };
 
-  const openModal = (filter) => {
-    setActiveFilter(filter);
-    setModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setModalOpen(false);
-    setActiveFilter(null);
-  };
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
@@ -108,23 +99,7 @@ export  function FilterScrollbarWithModal() {
     };
   }, []);
 
-  // Gestionnaire pour fermer le modal si on clique à l'extérieur
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      const modalElement = document.getElementById('filter-modal');
-      if (modalOpen && modalElement && !modalElement.contains(event.target)) {
-        closeModal();
-      }
-    };
 
-    if (modalOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
-    }
-    
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [modalOpen]);
 
   return (
     <div className="w-full bg-white relative border-b border-gray-200">
@@ -169,96 +144,7 @@ export  function FilterScrollbarWithModal() {
         )}
       </div>
 
-      {/* Modal avec formulaire */}
-      {modalOpen && activeFilter && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div 
-            id="filter-modal"
-            className="bg-white rounded-lg p-6 w-full max-w-md relative"
-          >
-            <button 
-              onClick={closeModal}
-              className="absolute top-2 right-2 text-gray-400 hover:text-gray-600"
-            >
-              <X size={24} />
-            </button>
-            
-            <h3 className="text-lg font-semibold mb-4 text-green-500">
-              {activeFilter.label}
-            </h3>
-            
-            {activeFilter.formFields && activeFilter.formFields.length > 0 ? (
-              <form onSubmit={handleFormSubmit}>
-                <div className="space-y-4">
-                  {activeFilter.formFields.map((field) => (
-                    <div key={field.id} className="flex flex-col">
-                      <label htmlFor={field.id} className="text-sm font-medium text-gray-700 mb-1">
-                        {field.label}
-                      </label>
-                      
-                      {field.type === 'checkbox' ? (
-                        <div className="flex items-center">
-                          <input
-                            type="checkbox"
-                            id={field.id}
-                            name={field.id}
-                            className="h-4 w-4 text-green-500 focus:ring-green-500 border-gray-300 rounded"
-                          />
-                          <label htmlFor={field.id} className="ml-2 text-sm text-gray-700">
-                            {field.label}
-                          </label>
-                        </div>
-                      ) : field.type === 'range' ? (
-                        <div className="space-y-2">
-                          <input
-                            type="range"
-                            id={field.id}
-                            name={field.id}
-                            min={field.min}
-                            max={field.max}
-                            step={field.step}
-                            className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
-                            defaultValue={field.min + (field.max - field.min) / 2}
-                          />
-                          <div className="flex justify-between text-xs text-gray-500">
-                            <span>{field.min}</span>
-                            <span>{field.max}</span>
-                          </div>
-                        </div>
-                      ) : (
-                        <input
-                          type={field.type}
-                          id={field.id}
-                          name={field.id}
-                          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 sm:text-sm"
-                        />
-                      )}
-                    </div>
-                  ))}
-                </div>
-                
-                <div className="mt-6 flex justify-end space-x-3">
-                  <button
-                    type="button"
-                    onClick={closeModal}
-                    className="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
-                  >
-                    Annuler
-                  </button>
-                  <button
-                    type="submit"
-                    className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-500 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
-                  >
-                    Appliquer
-                  </button>
-                </div>
-              </form>
-            ) : (
-              <p className="text-gray-500">Options non disponibles pour ce filtre.</p>
-            )}
-          </div>
-        </div>
-      )}
+        
     </div>
   );
 }
