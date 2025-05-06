@@ -160,6 +160,12 @@ select:open::picker-icon {
 	padding: 4px;
 }
 
+.search input.hasVal + label, .searchModal input.hasVal + label
+{
+	transform: unset;	
+}
+
+
 .searchModal input:hover + label, .searchModal input:focus + label, .searchModal input.hasVal + label
 {
 	z-index: 30;

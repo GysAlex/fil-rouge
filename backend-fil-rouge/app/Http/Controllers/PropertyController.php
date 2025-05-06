@@ -118,7 +118,7 @@ class PropertyController extends Controller
                 'nombre_cuisine' => $request->nombre_cuisine,
                 'nombre_salon' => $request->nombre_salon,
                 'nombre_douches' => $request->nombre_douches,
-                'property_loc' => $request->property_loc,
+                'coloc' => $request->property_loc,
                 'property_region' => $region_id->id,
                 'university_id' => $university->id
             ]);

@@ -13,6 +13,8 @@ use App\Http\Controllers\OwnerController;
 use App\Http\Controllers\ContractController;
 use App\Http\Controllers\OwnerLoginController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\PropertyDetailsController;
+use App\Http\Controllers\PropertyDetailsPublicController;
 
 
 
@@ -67,3 +69,12 @@ Route::prefix('owners')->group(function () {
 
 /*For the homepage */
 Route::get('/home', [HomeController::class, 'getUniversitiesWithProperties']);
+
+/*Handlnig detail home page */
+Route::middleware('auth:sanctum')->group(function () {
+    // ...existing routes...
+    Route::get('/owner/properties/{property}/details', [PropertyDetailsController::class, 'getPropertyDetails']);
+});
+
+/*This is the route for details */
+Route::get('/properties/{id}/details', [PropertyDetailsPublicController::class, 'getPropertyDetails']);

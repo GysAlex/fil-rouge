@@ -1,10 +1,29 @@
 import { Link, useParams } from "react-router-dom";
+import { usePropertyDetails } from "../../hooks/usePropertyDetails";
+import { PropertyDetailsSkeleton } from "../../components/PropertyDetailsSkeleton";
 
 export function PropertyDetails() {
-  const { id } = useParams();
+    const { id } = useParams();
+    const { 
+        stats, 
+        tenants, 
+        prospects,
+        loading,
+        error,
+        createContract,
+        sendNotification
+    } = usePropertyDetails(id);
 
-  const locataires = []
-  const prospects = []
+    
+    if (loading) {
+        return (
+            <div className="max-w-[1258px] px-[75px] xl:px-0 mx-auto lg:px-[60px] pt-[33px]">
+                <PropertyDetailsSkeleton />
+            </div>
+        );
+    }
+
+
 
   return (
     <div className="max-w-[1258px] px-[75px] xl:px-0 mx-auto lg:px-[60px] pt-[33px] flex flex-col items-stretch justify-start">
@@ -20,20 +39,20 @@ export function PropertyDetails() {
               <span>Locataires</span>
             </div>
             <div className="text-[35px] flex items-center justify-start gap-6 text-(--text-color) w-[80%] mx-auto">
-              <span>05</span>
+              <span>{stats.totalTenants}</span>
               <span className="text-[14px] text-(--primary-green)">
                 <i className="fa-solid fa-arrow-up mx-2"></i>
                 3,4% depuis le dernier mois
               </span>
             </div>
           </div>
-          <div className="total-locatire flex flex-col justify-center gap-6 border-l-4 border-l-(--primary-green) shadow-sm p-3">
+          <div className="total-favoris flex flex-col justify-center gap-6 border-l-4 border-l-(--primary-green) shadow-sm p-3">
             <div className=" text-[18px] flex items-center justify-start gap-6 text-(--text-color) w-[80%] mx-auto">
               <i className="fa-solid text-2xl fa-heart text-(--primary-green)"></i>
               <span>Ajout en favoris</span>
             </div>
             <div className="text-[35px] flex items-center justify-start gap-6 text-(--text-color) w-[80%] mx-auto">
-              <span>12</span>
+              <span>{stats.totalFavorites}</span>
               <span className="text-[14px] text-red-400">
                 <i className="fa-solid fa-arrow-down mx-2"></i>
                 10% depuis le dernier mois
@@ -46,7 +65,7 @@ export function PropertyDetails() {
               <span>Total des revenus</span>
             </div>
             <div className="text-[35px] flex items-stretch flex-col justify-start gap-6 text-(--text-color) w-[80%] mx-auto">
-              <span>1 500 000 FCFA</span>
+              <span>{stats.totalRevenue + " "} FCFA</span>
             </div>
           </div>
         </div>
@@ -103,50 +122,50 @@ export function PropertyDetails() {
               <div></div>
             </div>
 
-            {(locataires && locataires.length) > 0 ? (
-              locataires.map((locataire) => (
+            {(tenants && tenants.length) > 0 ? (
+              tenants.map((tenants) => (
                 <div
-                  key={locataire.id}
+                  key={tenants.id}
                   className="flex flex-col md:grid md:grid-cols-5 gap-4 py-3 items-center border-b md:border-0"
                 >
                   <div className="flex items-center md:ms-8 text-center w-full md:w-auto justify-center md:justify-start">
                     <img
                       src={
-                        locataire.image
-                          ? `http://localhost:8000/storage/${locataire.image}`
+                        tenants.image
+                          ? `http://localhost:8000/storage/${tenants.image}`
                           : "http://localhost:5173/images/team2.jpg"
                       }
-                      alt={locataire.name}
+                      alt={tenants.name}
                       className="size-12 rounded-full mr-3 object-cover"
                     />
-                    <span className="text-sm">{locataire.name}</span>
+                    <span className="text-sm">{tenants.name}</span>
                   </div>
                   <div className="w-full md:w-auto text-center md:text-left">
                     <span className="md:hidden font-medium mr-2">Durée:</span>
                     {computeDuration(
-                      locataire.contracts[0].date_debut,
-                      locataire.contracts[0].date_fin
+                      tenants.contracts[0].date_debut,
+                      tenants.contracts[0].date_fin
                     )}
                   </div>
                   <div className="w-full md:w-auto  md:text-start text-center">
                     <span
                       className={`px-4 py-1 rounded-full ms-2 text-sm ${
-                        locataire.contracts[0].statut === "en_cours"
+                        tenants.contracts[0].statut === "en_cours"
                           ? "bg-green-300 text-gray-700"
-                          : locataire.contracts[0].statut === "à_venir"
+                          : tenants.contracts[0].statut === "à_venir"
                           ? "bg-[#bffee4] text-gray-700"
                           : "text-gray-700 bg-red-500"
                       }`}
                     >
-                      {locataire.contracts[0].statut}
+                      {tenants.contracts[0].statut}
                     </span>
                   </div>
                   <div className="w-full md:w-auto text-center md:text-left">
-                    {locataire.email}
+                    {tenants.email}
                   </div>
                   <div className="w-full md:w-auto text-center">
                     <button
-                      onClick={() => openModal(updateContractModal, locataire)}
+                      onClick={() => openModal(updateContractModal, tenants)}
                       className="text-gray-500 hover:text-green-500"
                     >
                       <i className="fa-solid fa-eye"></i>
@@ -165,12 +184,22 @@ export function PropertyDetails() {
         <div className="mt-5">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-lg font-medium">Locataires Potentiels</h2>
-            <button
-              onClick={()=>null}
-              className="bg-green-500 text-white px-4 py-2 rounded-md flex items-center text-sm hover:bg-green-600 transition-colors"
-            >
-              <i className="mr-2 fa-solid fa-plus" /> Envoyer une notification
-            </button>
+            <div className="flex items-center justify-center flex-row gap-3">
+                <button
+                    onClick={()=>null}
+                    className="bg-green-500 text-white px-4 py-2 rounded-md flex items-center text-sm hover:bg-green-600 transition-colors"
+                    >
+                    <i className="mr-2 fa-solid fa-plus" /> Nouveau contrat
+                </button>
+
+                <button
+                onClick={()=>null}
+                className="bg-green-500 text-white px-4 py-2 rounded-md flex items-center text-sm hover:bg-green-600 transition-colors"
+                >
+                    <i className="mr-2 fa-solid fa-plus" /> Envoyer une notification
+                </button>
+            </div>
+
           </div>
 
           <div
@@ -195,46 +224,42 @@ export function PropertyDetails() {
               </div>
             </div>
 
-            <div className="hidden md:grid grid-cols-5 gap-4 my-4 text-sm text-gray-500 pb-2">
+            <div className="hidden md:grid grid-cols-4 gap-4 my-4 text-sm text-gray-500 pb-2">
               <div className="md:ms-5">Profile</div>
               <div>date de l'ajout</div>
               <div>email utilisateur</div>
               <div></div>
             </div>
 
-            {(locataires && locataires.length) > 0 ? (
-              locataires.map((locataire) => (
+            {(prospects && prospects.length) > 0 ? (
+              prospects.map((prospect) => (
                 <div
-                  key={locataire.id}
+                  key={prospect.id}
                   className="flex flex-col md:grid md:grid-cols-5 gap-4 py-3 items-center border-b md:border-0"
                 >
                   <div className="flex items-center md:ms-8 text-center w-full md:w-auto justify-center md:justify-start">
                     <img
                       src={
-                        locataire.image
-                          ? `http://localhost:8000/storage/${locataire.image}`
+                        prospect.image
+                          ? `http://localhost:8000/storage/${prospect.image}`
                           : "http://localhost:5173/images/team2.jpg"
                       }
-                      alt={locataire.name}
+                      alt={prospect.name}
                       className="size-12 rounded-full mr-3 object-cover"
                     />
-                    <span className="text-sm">{locataire.name}</span>
-                  </div>
-                  <div className="w-full md:w-auto text-center md:text-left">
-                    <span className="md:hidden font-medium mr-2">Durée:</span>
-                      
+                    <span className="text-sm">{prospect.name}</span>
                   </div>
                   <div className="w-full md:w-auto  md:text-start text-center">
                     <span>
-                      {locataire.contracts[0].statut}
+                      {prospect.properties.date_ajout}
                     </span>
                   </div>
                   <div className="w-full md:w-auto text-center md:text-left">
-                    {locataire.email}
+                    {prospect.email}
                   </div>
                   <div className="w-full md:w-auto text-center">
                     <button
-                      onClick={() => openModal(updateContractModal, locataire)}
+                      onClick={() => openModal(updateContractModal, prospect)}
                       className="text-gray-500 hover:text-green-500"
                     >
                       <i className="fa-solid fa-eye"></i>
@@ -244,7 +269,7 @@ export function PropertyDetails() {
               ))
             ) : (
               <div className="text-sm text-center text-red-400 my-10">
-                Aucun contrats pour le moment
+                Aucun prospects pour le moment
               </div>
             )}
           </div>

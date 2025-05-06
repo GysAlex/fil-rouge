@@ -63,7 +63,7 @@ export function EditProperty() {
                 nombre_cuisine: formData.cuisine?.number || 0,
                 nombre_salon: formData.salon?.number || 0,
                 nombre_douches: formData.douche?.number || 0,
-                property_loc: formData.coloc || false,
+                property_loc: formData.propertyLoc || false,
                 // Relations
                 property_region: formData.propertyRegion,
                 university_name: formData.propertyUniversity,

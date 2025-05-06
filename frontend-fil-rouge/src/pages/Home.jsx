@@ -9,6 +9,7 @@ import { Toaster, toast } from "sonner"
 import { useHome } from "../hooks/useHome"
 import { HomeSkeleton } from "../components/HomeSkeleton"
 import { LineFilterSkeleton } from "../components/LineFilterSkeleton"
+import { SearchBarSkeleton } from "../components/SearchBarSkeleton"
 
 
 
@@ -43,7 +44,8 @@ export function Home()
             </div>
             <div className="absolute -bottom-[50px] h-24  w-[95%] hidden md:block " style={{transform: "translateX(2.5%)"}}>
                 <div className="w-fit mx-auto h-full relative ">
-                    <SearchBar/>
+                    
+                    {loading ? (<SearchBarSkeleton/>) : <SearchBar/> }
                 </div>
             </div>  
         </div>
@@ -56,10 +58,8 @@ export function Home()
             
         {loading && (
             <>
-                {/* Titre Skeleton unique */}
                 <div className="h-8 bg-gray-200 rounded-lg w-1/3 mb-6 animate-pulse"></div>
                 
-                {/* Grid des cartes skeleton */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {Array.from({ length: 6 }).map((_, index) => (
                         <HomeSkeleton key={index} />
@@ -71,8 +71,8 @@ export function Home()
             
             {
                 !loading &&  universities.map(university => (
-                    <div className="space-y-8">
-                        <section key={university.id} className="mb-16 mt-[33px]">
+                    <div className="space-y-8" key={university.id}>
+                        <section  className="mb-16 mt-[33px]">
                             <h2 className="text-[20px] text-(--title-color) mb-1 ps-3">
                                 {university.universitie_name}  <div  className="line h-[2px] bg-(--primary-green) w-[90%] lg:w-full relative rounded-tr-full">
                                 </div>

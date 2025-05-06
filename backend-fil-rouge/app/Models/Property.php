@@ -10,6 +10,7 @@ use App\Models\PropertyTag;
 use App\Models\Image;
 use App\Models\Contract;
 use App\Models\Property;
+use App\Models\User;
 
 class Property extends Model
 {
@@ -29,7 +30,8 @@ class Property extends Model
         'type',
         'university_id',
         'published',
-        'coloc'
+        'coloc',
+        'published_at'
     ];
 
     public function university()
@@ -62,5 +64,10 @@ class Property extends Model
     public function favoritedByUsers()
     {
         return $this->belongsToMany(User::class, 'property_user', 'property_id', 'user_id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }
