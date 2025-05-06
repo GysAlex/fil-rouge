@@ -8,10 +8,10 @@ import {FilterScrollbarWithModal} from "../components/FilterScrollbarWithModal";
 
 export function Resultatrecherche() {
     return <>
-    <div className="">
-        <div className="flex items-center  lg:px-16 flex-wrap gap-[30px]">
-        <FilterScrollbarWithModal/>
-        </div>
+        <div className="flex flex-col items-stretch justify-start">
+            <div className="flex items-center  lg:px-16 flex-wrap gap-[30px]">
+                <FilterScrollbarWithModal/>
+            </div>
      
         <div className="flex items-center justify-between flex-wrap gap-[30px] mt-5">
             <DependHome img={'http://localhost:5173/images/g2.jpg'}/>

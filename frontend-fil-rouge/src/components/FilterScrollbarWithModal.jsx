@@ -128,10 +128,10 @@ export  function FilterScrollbarWithModal() {
 
   return (
     <div className="w-full bg-white relative border-b border-gray-200">
-      <div className="flex items-center px-2 py-1 gap-2">
-        <div className="flex items-center gap-1 text-gray-700 mb-20">
+      <div className="flex items-stretch justify-start flex-col px-2 ">
+        <div className="flex items-center gap-3 text-gray-700 p-4">
           <SlidersHorizontal size={18} />
-          <span className="text-sm font-medium text-green-500 ">Trier par</span>
+          <span className="text-sm font-medium min-w-max text-green-500 ">Trier par</span>
         </div>
         
         {showLeftArrow && (
@@ -145,7 +145,7 @@ export  function FilterScrollbarWithModal() {
         
         <div 
           ref={scrollContainerRef}
-          className="flex gap-3 overflow-x-auto scrollbar-hide px-2 py-2 ml-2 scroll-smooth"
+          className="flex gap-3 overflow-x-auto scrollbar-hide px-2 py-2 scroll-smooth"
           style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
         >
           {filters.map((filter) => (

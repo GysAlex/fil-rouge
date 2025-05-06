@@ -25,7 +25,7 @@ const router = createBrowserRouter([
 				element: <div>This is the owner page</div>
 			},
 			{
-				path:"/resultatrecherche",
+				path:"/results",
 				element: <Resultatrecherche/>
 			},
 			

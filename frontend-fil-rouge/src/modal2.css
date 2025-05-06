@@ -1,0 +1,36 @@
+.modal2
+{
+	display: none;
+	transition-behavior: allow-discrete;
+	transition-property: display opacity;
+	transition-duration: .4s;
+	background-color: rgba(0, 0, 0, .2);
+	opacity: 0;
+}
+
+.modal2.show 
+{
+	opacity: 1;
+	display: flex;
+
+	@starting-style{
+		opacity: 0;
+	}
+}
+
+.modal2 form
+{
+	transition-behavior: allow-discrete;
+	transition-property: display opacity;
+	margin-top: 150px;
+	transition-duration: .4s;
+	transform: translateX(-20vw);	
+}
+
+.modal2.show form
+{
+	transform: translateX(0);
+	@starting-style{
+		transform: translateX(20vh)
+	}
+}
