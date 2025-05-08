@@ -15,6 +15,7 @@ import { ModalContainer } from "../containers/modals.jsx/ModalContainer";
 import { usePropertyPublicDetails } from "../hooks/usePropertyPublicDetails";
 import { DetailSkeleton } from "../components/DetailsSkeleton";
 import { formatCurrency } from "../components/utilities/formatCurrency";
+import { useAuth } from "../hooks/useAuth";
 
 
 export function Detail()
@@ -33,6 +34,8 @@ export function Detail()
         return <div className="text-red-500 text-center py-8">{error}</div>;
     }
     const {openModal} = useModal()
+    
+    const {state, role} = useAuth()
 
     const handleClick = ()=>{
         openModal(ModalRenterLogin)
@@ -166,11 +169,11 @@ export function Detail()
                                 <div className="text-(--text-color) w-[70%]" style={{lineHeight: "30px"}}>Prochain jour de visite <span className="font-medium">12 Octobre 2025</span></div>
                             </ArrowItem>
                         </div>
-                        <div className="mt-[30px] flex items-center justify-center lg:justify-start  mb-[30px] lg:mb-0">
+                         {(!state || (role && !role.includes('renter')))  && <div className="mt-[30px] flex items-center justify-center lg:justify-start  mb-[30px] lg:mb-0">
                             <Button handleClick={handleClick}>
                                 je suis intéressé(é) par ce logement
                             </Button>
-                        </div>
+                        </div>}
                     </div>
                 </div>
             </div>

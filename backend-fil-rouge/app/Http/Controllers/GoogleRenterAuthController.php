@@ -15,7 +15,7 @@ class GoogleRenterAuthController
     {
 
         $googleUser = Socialite::driver('google')->user()->user;
-        
+
         $userData = [
             'name' => $googleUser['given_name'],
             'family_name' => $googleUser['family_name'],
@@ -24,13 +24,16 @@ class GoogleRenterAuthController
             'google_id' => $googleUser['id'],
         ];
 
-        $user = User::where('google_id', $googleUser['id'])->first();
-        
-        if ($user) {
-            if (!$user->roles->contains('name', 'renter')) {
-                $user->roles()->attach(2); // Remplacez 2 par l'ID réel du rôle "renter"
-            }
+        $user = User::where('google_id', $googleUser['id'])->orWhere('email',  $googleUser['email'])->first();
 
+        if ($user) {
+            // Vérifier si l'utilisateur n'a pas déjà le rôle "renter"
+            if (!$user->roles->contains('name', 'renter')) {
+                // Conserver les rôles existants et ajouter le rôle "renter"
+                $currentRoles = $user->roles->pluck('id')->toArray();
+                $currentRoles[] = 2; // ID du rôle "renter"
+                $user->roles()->sync($currentRoles);
+            }
             // Connecter l'utilisateur
             Auth::login($user);
 
@@ -45,8 +48,8 @@ class GoogleRenterAuthController
         if ($user->email_verified_at === null) {
             $user->update(['email_verified_at' => Carbon::now()]);
         }
-        
-        $user->roles()->attach(2); 
+
+        $user->roles()->attach(2);
 
         Auth::login($user);
 

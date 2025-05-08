@@ -261,9 +261,9 @@ export function DashboardAdmin() {
                   <div className="w-full md:w-auto text-center">
                     <Link
                       to={`/owner/edit-property/${logement.id}`}
-                      className="w-full md:w-auto border border-green-500 text-green-500 rounded-full px-4 py-2 text-sm hover:bg-green-50 transition-colors"
+                      className="w-full min-w-max md:w-auto border border-green-500 text-green-500 rounded-full px-4 py-2 text-sm hover:bg-green-50 transition-colors"
                     >
-                      mettre à jour
+                      <span className="min-w-max">modifier</span> 
                     </Link>
                   </div>
                 </div>

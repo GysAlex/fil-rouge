@@ -31,7 +31,17 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('property_tag_property');
+        // Désactiver temporairement les contraintes de clé étrangère
+        Schema::disableForeignKeyConstraints();
+
+        DB::table('property_property_tag')->truncate();
+        DB::table('property_tags')->truncate();
+
+        // Supprimer les tables dans le bon ordre
+        Schema::dropIfExists('property_property_tag');
         Schema::dropIfExists('property_tags');
+
+        // Réactiver les contraintes de clé étrangère
+        Schema::enableForeignKeyConstraints();
     }
 };

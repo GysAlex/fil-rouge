@@ -11,6 +11,7 @@ use App\Models\Asset;
 use App\Models\Role;
 use App\Models\User;
 use App\Models\Contract;
+use App\Models\PropertyTag;
 
 Route::get('/', function () {
     return view('welcome');
@@ -68,12 +69,5 @@ Route::get('/auth/google/owner/callback', [GoogleOwnerHandleController::class, '
 
 Route::get('/test', function () {
 
-    $owner = auth()->user();
-    $contrats = Contract::with('property', 'user')
-    ->whereHas('property', function ($query) use ($owner) {
-        $query->where('user_id', $owner->id);
-    })
-    ->get();
-
-    return $contrats->where('statut','à_venir');
+    return "EVERYTHING IS OK";
  });

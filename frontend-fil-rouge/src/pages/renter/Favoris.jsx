@@ -1,39 +1,64 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ArrowItem } from "../../components/ArrowItem";
 import { HomeTags } from "../../components/Tags";
+import { useNavigate } from "react-router-dom";
+import { toast, Toaster } from "sonner";
+import axios from "axios";
+import { FavorisSkeleton } from "../../components/FavorisSkeleton";
+import { ModalContainer } from "../../containers/modals.jsx/ModalFilterContainer";
+import { useModal } from "../../hooks/useModal";
+import { ContactOwnerModal } from "../../containers/modals.jsx/ContactOwnerModal";
+
+axios.defaults.withCredentials=true
+axios.defaults.withXSRFToken=true
 
 export function Favoris() {
+    const { openModal } = useModal();
 
-    const [favoriteProperties, setFavoriteProperties] = useState([
-        {
-          id: 1,
-          name: "MCK APPARTEMENT",
-          image: "/api/placeholder/400/300",
-          rating: 3.3,
-          reviews: 4,
-          location: "IUT de Douala",
-          bedrooms: 1,
-          bathrooms: 2,
-          distance: 30, // en minutes du campus
-          tags: ["wifi", "air conditionné", "salle d'études", "réfrigérateur", "TV disponible"],
-          description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-          collaboration: true
-        },
-        {
-          id: 2,
-          name: "MCK APPARTEMENT",
-          image: "/api/placeholder/400/300",
-          rating: 3.3,
-          reviews: 4,
-          location: "IUT de Douala",
-          bedrooms: 1,
-          bathrooms: 2,
-          distance: 30, // en minutes du campus
-          tags: ["wifi", "air conditionné", "salle d'études", "réfrigérateur", "TV disponible"],
-          description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-          collaboration: true
+    const handleContactOwner = (propertyId) => {
+        openModal(ContactOwnerModal, propertyId );
+    };
+
+    const [favoriteProperties, setFavoriteProperties] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    const nav = useNavigate()
+
+    const fetchFavorites = async () => {
+        try {
+            const response = await axios.get('/api/favorites');
+            if (response.data.status === 'success') {
+                setFavoriteProperties(response.data.favorites);
+                console.log("Bonjour")
+            }
+        } catch (error) {
+            toast.error('Erreur lors de la récupération des favoris');
+        } finally {
+            setLoading(false);
         }
-      ]);
+    };
+
+    useEffect(() => {
+      fetchFavorites();
+  }, []);
+    
+
+
+    const removeFromFavorites = async (propertyId) => {
+        try {
+            const response = await axios.post(`/api/favorites/toggle`,{
+              property_id: propertyId,
+            } );
+
+            if (response.data.status === 'removed') {
+                setFavoriteProperties(prev => prev.filter(prop => prop.id !== propertyId));
+                toast.success('Propriété retirée des favoris');
+            }
+        } catch (error) {
+            toast.error('Erreur lors de la suppression du favori');
+        }
+    };
+
 
 
       // État pour la notification
@@ -44,9 +69,7 @@ export function Favoris() {
   });
 
     // Fonction pour supprimer une propriété des favoris
-    const removeFromFavorites = (propertyId) => {
-        setFavoriteProperties(favoriteProperties.filter(prop => prop.id !== propertyId));
-    };
+
 
     // Fonction pour gérer les changements dans les paramètres de notification
     const handleNotificationChange = (setting) => {
@@ -56,35 +79,38 @@ export function Favoris() {
         });
     };
 
-    // Fonction pour voir l'annonce en ligne
     const viewListing = (propertyId) => {
-        alert(`Redirection vers l'annonce #${propertyId}`);
-        // Ici vous pouvez rediriger vers la page de l'annonce
-        // window.location.href = `/property/${propertyId}`;
+        nav('/detail/'+propertyId)
     };
 
-    return <div className="max-w-[1258px]  px-[75px] xl:px-0 mx-auto lg:px-[60px] pt-[33px] flex flex-col items-stretch justify-start mb-[20px]">
+    if(loading){
+      return <FavorisSkeleton />
+    }
+
+    return (<>
+      <Toaster richColors position="top-right" />
+       <div className="max-w-[1258px]  px-[75px] xl:px-0 mx-auto lg:px-[60px] pt-[33px] flex flex-col items-stretch justify-start mb-[20px]">
             <div className="py-6 w-full mx-auto">
                 <h2 className="text-(--primary-green)  mb-1">Favoris</h2>
                 <h1 className="text-[28px] mb-6">Les Logements que vous avez apprécié</h1>
             </div>
             <div className="space-y-6">
-            {favoriteProperties.map((property, index) => (
+            {favoriteProperties.length > 0 ? favoriteProperties.map((property, index) => (
               <div 
                 key={property.id} 
-                className={`bg-white rounded-lg overflow-hidden shadow-sm border `}
+                className={`bg-white rounded-lg overflow-hidden`} style={{boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.25)"}}  
               >
                 <div className="grid md:grid-cols-3 grid-cols-1 grid-rows-2 md:grid-rows-1 " >
                   {/* Property Image */}
                   <div className="">
                     <div className="relative h-full">
                       <img 
-                        src={property.image} 
+                        src={"http://localhost:8000/storage/"+property.image_path} 
                         alt={property.name} 
                         className="w-full h-full object-cover"
                       />
                       <div className="absolute bottom-2 left-2 bg-white bg-opacity-80 px-3 py-1 rounded-md text-sm font-medium">
-                        {property.location}
+                          {property.university.universitie_name}
                       </div>
                     </div>
                   </div>
@@ -112,7 +138,7 @@ export function Favoris() {
                     <div className="flex flex-wrap gap-2 mb-4">
                       {property.tags.map((tag, i) => (
                         <HomeTags key={i} >
-                          {tag}
+                          {tag.tag_name}
                         </HomeTags>
 
                       ))}
@@ -131,34 +157,52 @@ export function Favoris() {
                     <div className="space-y-2 mb-4">
                       <div className="flex items-center text-sm">
                         <ArrowItem >
-                            <span>{property.bedrooms} chambre, {property.bathrooms} douches</span>
+                            <span>{property.nombre_chambres ? property.nombre_chambres > 1 ? `${property.nombre_chambres} chambres`:`${property.nombre_chambres} chambre ` : "" } , 
+                            {property.nombre_douches ? property.nombre_douches > 1 ? `${property.nombre_douches} douches`:`${property.nombre_douches} douche ` : "" }, 
+                            {property.nombre_salon ? property.nombre_salon > 1 ? `${property.nombre_salon} salons`:`${property.nombre_salon} salon ` : "" } 
+                            {property.nombre_cuisine ? property.nombre_cuisine > 1 ? `${property.nombre_cuisine} cuisines`:`${property.nombre_cuisine} cuisine ` : "" } 
+                            </span>
+                            
                         </ArrowItem>
                       </div>
                       <div className="flex items-center text-sm">
                         <ArrowItem >
-                            <span>{property.distance} minutes du campus</span>
+                            <span>5 minutes du campus</span>
                         </ArrowItem>
                       </div>
-                      <div className="flex items-center text-sm">
+                    {property.coloc && <div className="flex items-center text-sm">
                         <ArrowItem >
-                            <span>Colocation possible</span>
+                          <span>Colocation possible</span>
                         </ArrowItem>
-                      </div>
+                      </div>}
                     </div>
 
                     {/* Action Button */}
-                    <div className="text-center">
+                    <div className="flex items-center justify-start gap-4 my-3">
                       <button 
                         onClick={() => viewListing(property.id)}
-                        className="bg-green-500 hover:bg-green-600 text-white py-2 px-6 rounded-2xl"
+                        className="bg-green-500 hover:bg-green-600 text-white text-sm py-2 px-6 rounded-2xl"
                       >
                         Voir l'annonce en ligne
                       </button>
+
+                      <button 
+                        onClick={()=>  openModal(ContactOwnerModal, property )}
+                        className="bg-green-500 hover:bg-green-600 text-white text-sm py-2 px-6 rounded-2xl"
+                      >
+                        Contacter le propriétaire
+                      </button>
+
                     </div>
                   </div>
                 </div>
               </div>
-            ))}
+            )) : 
+            <div className="text-xl text-red-400 h-[300px] grid place-items-center">
+                Aucun favoris pour le moment
+            </div> }
         </div>
     </div>
+  </>  
+  )
 }

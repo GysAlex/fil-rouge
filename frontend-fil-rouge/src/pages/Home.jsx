@@ -2,7 +2,7 @@ import { useLocation } from "react-router-dom"
 import { Button } from "../components/Button"
 import { HomeSwiper } from "../components/HomeSwiper"
 import { LineFilter } from "../components/LineFilter"
-import { HomeNavBar, HomeSmaller } from "../components/NavBar"
+import { AuthNavBar, HomeNavBar, HomeSmaller } from "../components/NavBar"
 import { SearchBar } from "../components/SearchBar"
 import { ModalContainer } from "../containers/modals.jsx/ModalContainer"
 import { Toaster, toast } from "sonner"
@@ -10,6 +10,7 @@ import { useHome } from "../hooks/useHome"
 import { HomeSkeleton } from "../components/HomeSkeleton"
 import { LineFilterSkeleton } from "../components/LineFilterSkeleton"
 import { SearchBarSkeleton } from "../components/SearchBarSkeleton"
+import { useAuth } from "../hooks/useAuth"
 
 
 
@@ -19,6 +20,8 @@ export function Home()
 
     const location = useLocation()
     
+    const {state} = useAuth()
+
     const {universities, loading, error} = useHome() 
 
     console.log(universities)
@@ -32,8 +35,8 @@ export function Home()
     return <>
         <Toaster richColors position="top-right"/>
         <ModalContainer/>
-        <HomeNavBar/>
-        <HomeSmaller/>
+        {!state ? <HomeNavBar/> : <AuthNavBar/>}
+        {!state ? <HomeSmaller/> : <HomeSmaller/>}
         <div className="relative h-[220px] inside hidden md:block z-30" >
             <div className="absolute w-full h-full bg-(--home-bg)">
                 <div className="max-w-[1258px] text-[36px]  mx-auto px-4 md:px-4 xl:px-0 mt-[40px] lg:mt-[60px]">

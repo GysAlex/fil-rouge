@@ -12,6 +12,7 @@ import { LocationInfoProvider } from './hooks/useLocation.jsx';
 import { TagsProvider } from './hooks/useTags.jsx';
 import { AssetProvider } from './hooks/useAsset.jsx';
 import { PropertyProvider } from './hooks/useProperty.jsx';
+import { FilterProvider } from './hooks/useFilter.jsx';
 
 
 
@@ -19,6 +20,9 @@ createRoot(document.getElementById('root')).render(
 
   <LocationInfoProvider>
     <PropertyProvider>
+
+    <FilterProvider>
+
       <AssetProvider>
         <TagsProvider>
           <AuthContextProvider>
@@ -34,6 +38,9 @@ createRoot(document.getElementById('root')).render(
           </AuthContextProvider>
         </TagsProvider>
       </AssetProvider>
+
+      </FilterProvider>
+
     </PropertyProvider>
   </LocationInfoProvider>
 )

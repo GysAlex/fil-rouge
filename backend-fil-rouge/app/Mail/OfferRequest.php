@@ -9,14 +9,14 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class EmailVerificationMail extends Mailable implements ShouldQueue
+class OfferRequest extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
     /**
      * Create a new message instance.
      */
-    public function __construct(public $user, public $verificationCode)
+    public function __construct(public $property, public $offerAmount, public $details, public $renterName)
     {
         //
     }
@@ -27,7 +27,7 @@ class EmailVerificationMail extends Mailable implements ShouldQueue
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Email de vérification',
+            subject: 'Nouvelle offre pour votre logement',
         );
     }
 
@@ -37,7 +37,7 @@ class EmailVerificationMail extends Mailable implements ShouldQueue
     public function content(): Content
     {
         return new Content(
-            markdown: 'emails.email_verification',
+            markdown: 'mail.offer-request',
         );
     }
 

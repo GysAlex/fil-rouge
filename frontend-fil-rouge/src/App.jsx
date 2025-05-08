@@ -19,6 +19,7 @@ import { OwnerProvider } from './hooks/useOwner'
 import { EditProperty } from './pages/owner/EditProperty'
 import { PropertyDetails } from './pages/owner/PropertyDetails'
 import { Notificationclient } from './pages/Notificationclients'
+import { ModalContainer } from './containers/modals.jsx/ModalContainer'
 
 const router = createBrowserRouter([
 	{
@@ -32,7 +33,7 @@ const router = createBrowserRouter([
 
 			{
 				path:"/results/:region?/:university?",
-				element: <Resultatrecherche/>
+				element:  <> <ModalContainer/> <Resultatrecherche/></> 
 			},
 
 		]

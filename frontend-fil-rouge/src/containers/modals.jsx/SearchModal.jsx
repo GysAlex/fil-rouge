@@ -14,9 +14,12 @@ export function SearchModal() {
         regions: [],
         universitiesByRegion: {}
     });
-    const [selectedRegion, setSelectedRegion] = useState('');
+
+    
+    const [selectedRegion, setSelectedRegion] = useState("");
     const [selectedUniversity, setSelectedUniversity] = useState('');
     const [loading, setLoading] = useState(false);
+
 
     useEffect(() => {
         const fetchData = async () => {
@@ -42,6 +45,8 @@ export function SearchModal() {
         fetchData();
     }, []);
 
+    console.log(data)
+
     useEffect(() => {
         const handleOutsideClick = (event) => {
             if (inputRef.current && !inputRef.current.contains(event.target)) {
@@ -66,7 +71,7 @@ export function SearchModal() {
     const handleSearch = (e) => {
         e.preventDefault();
         if (selectedRegion || selectedUniversity) {
-            console.log('Recherche:', { selectedRegion, selectedUniversity });
+            window.location.href = `/results/${selectedRegion}/${selectedUniversity}`;
             closeModal();
         }
     };
@@ -89,7 +94,9 @@ export function SearchModal() {
                 </button>
             </div>
 
+        {!loading && ( <>
             <div className="relative flex-grow sm:flex-grow-0">
+                
                 <SearchInput3 
                     handleInputFocus={() => setShowRegionSuggestion(true)}
                     showSuggestions={showRegionSuggestion}
@@ -112,7 +119,7 @@ export function SearchModal() {
                     id="university-search-mobile"
                 />
             </div>
-
+        </>)}
             <ButtonModal type="submit" disabled={loading}>
                 <i className="fa-solid fa-magnifying-glass"></i>
                 <span>rechercher</span>

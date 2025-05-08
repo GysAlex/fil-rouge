@@ -34,7 +34,7 @@ export function Owner()
             <div className={cls}>
                 <OwnerSideBar/>
             </div>
-            <div className="nextSide flex-grow">
+            <div className="nextSide flex-grow ms-7 md:ms-10 lg:ms-10 xl:ms-5">
                 <ModalContainer/>
                 <Outlet/>
             </div>

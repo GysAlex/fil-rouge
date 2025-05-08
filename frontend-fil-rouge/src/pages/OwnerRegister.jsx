@@ -36,7 +36,6 @@ export function OwnerRegister() {
                     phone_number: data.phoneNumber,
                     email: data.email,
                 });
-                setRole(user.role.map(el => el.name))
                 setUser(user)
                 toast.success("Informations de base enregistrées avec succès !");
                 setCurrentPage(2);
@@ -47,12 +46,14 @@ export function OwnerRegister() {
             }
         } else if (currentPage === 2) {
             try {
-                await sendVerificationCode({code: data.verificationCode});
+                const res = await sendVerificationCode({code: data.verificationCode});
                 toast.success("Code de validation envoyé !");
-                setTimeout(() => {
-                    nav('/owner/dashboard')
-                }, 300);
-                setUserState(false)
+                console.log(res.user)
+                setRole(res.user.roles.map(el => el.name))
+                console.log((res.user.roles.map(el => el.name)))
+                setUser(res.user)
+                setUserState(true)
+                nav('/owner/dashboard')
 
             } catch (err) {
                 toast.error("Erreur lors de l'envoi du code !");

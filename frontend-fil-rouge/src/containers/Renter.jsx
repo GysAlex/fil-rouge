@@ -29,11 +29,11 @@ export function Renter()
         <div>
             <AuthNavBar/>
         </div>
-        <div className="flex items-start justify-start relative">{isExpanded}
+        <div className="flex items-start justify-start relative ">
             <div className={cls}>
                 <SideBar/>
             </div>
-            <div className="nextSide flex-grow">
+            <div className="nextSide flex-grow ms-7 md:ms-10 lg:ms-15 xl:ms-15">
                 <ModalContainer/>
                 <Outlet/>
             </div>

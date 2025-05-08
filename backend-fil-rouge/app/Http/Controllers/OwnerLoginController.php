@@ -43,8 +43,7 @@ class OwnerLoginController extends Controller
             'phone_number' => $validatedData['phone_number'],
         ]);
 
-        // Attribution du rôle "owner" (id = 1)
-        $user->roles()->attach(1);
+
 
         // Générer un code de vérification
         $verificationCode = Str::random(6);
@@ -61,7 +60,7 @@ class OwnerLoginController extends Controller
 
         return response()->json([
             'message' => 'Propriétaire enregistré avec succès.',
-            'user'    => $user,
+            'user'    => $user->load(['roles']),
         ], 201);
     }
 
@@ -76,6 +75,8 @@ class OwnerLoginController extends Controller
                 'message' => 'Votre email est déjà confirmé.',
             ], 200);
         }
+
+                // Attribution du rôle "owner" (id = 1)
 
         // Valider le code de confirmation
         $validatedData = $request->validate([
@@ -93,12 +94,13 @@ class OwnerLoginController extends Controller
 
         // Confirmer l'email
         $user->email_verified_at = now();
+        $user->roles()->attach(1);
         $user->email_verification_code = null; // Supprimer le code après confirmation
         $user->save();
 
         return response()->json([
             'message' => 'Propriétaire enregistré avec succès.',
-            'user'    => $user,
+            'user'    => $user->load(['roles']),
         ], 201);
     }
 
@@ -135,11 +137,11 @@ class OwnerLoginController extends Controller
             'password.required' => 'Le mot de passe est obligatoire.',
             'password.min'      => 'Le mot de passe doit contenir au moins 8 caractères.',
         ]);
-    
+
         // Tentative de connexion
         if (Auth::attempt(['email' => $validatedData['email'], 'password' => $validatedData['password']])) {
             $user = Auth::user();
-    
+
             // Vérifier si l'utilisateur a le rôle "owner"
             if (!$user->roles->contains('name', 'owner')) {
                 Auth::logout();
@@ -147,7 +149,7 @@ class OwnerLoginController extends Controller
                     'message' => 'Vous n\'avez pas les privilèges de propriétaire.',
                 ], 403);
             }
-    
+
             // Vérifier si l'email est confirmé
             if (!$user->email_verified_at) {
                 Auth::logout();
@@ -155,14 +157,14 @@ class OwnerLoginController extends Controller
                     'message' => 'Veuillez confirmer votre adresse e-mail avant de vous connecter.',
                 ], 403);
             }
-    
+
             // Connexion réussie
             return response()->json([
                 'message' => 'Connexion réussie.',
                 'user'    => $user,
             ], 200);
         }
-    
+
         // Échec de la connexion
         return response()->json([
             'message' => 'Identifiants incorrects.',

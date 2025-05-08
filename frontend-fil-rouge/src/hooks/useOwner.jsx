@@ -20,7 +20,6 @@ export function OwnerProvider({ children }) {
         setError(null);
         setUserState(undefined)
         try {
-            await axios.get('/sanctum/csrf-cookie');
             const response = await axios.post(
                 "http://localhost:8000/api/owners/register",
                 ownerData
@@ -60,7 +59,6 @@ export function OwnerProvider({ children }) {
         setError(null);
 
         try {
-            await axios.get('/sanctum/csrf-cookie');
             const response = await axios.post(
                 "http://localhost:8000/api/owners/confirm-email",
                 verification_code

@@ -1,5 +1,15 @@
 import { Assets } from "./Assets";
 import { HomeTags } from "./Tags";
+import { ModalRenterLogin } from "../containers/modals.jsx/ModalRenterLogin";
+import { useAuth } from "../hooks/useAuth";
+import { useModal } from "../hooks/useModal";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
+import axios from "axios";
+import { Link } from "react-router-dom";
+axios.defaults.baseURL = "http://localhost:8000";
+axios.defaults.withCredentials = true;
+axios.defaults.withXSRFToken = true;
 
 export function Home()
 {
@@ -151,8 +161,55 @@ export function DependHome2({img})
 export function HomeDyn({home}) {
     const image = home.images.filter((el) => el.is_main == 1).map(el => el.image_path)
 
+    const { state, user } = useAuth();
+    const { openModal } = useModal();
+    const [isFavorite, setIsFavorite] = useState(false);
+    
+
+    useEffect(() => {
+        if (state) {
+            checkFavoriteStatus();
+        }
+    }, [state]);
+
+    const checkFavoriteStatus = async () => {
+        try {
+            const response = await axios.get(`/api/favorites/status/${home.id}`);
+            setIsFavorite(response.data.isFavorite);
+        } catch (error) {
+            console.error('Erreur lors de la vérification du statut:', error);
+        }
+    };
+
+    console.log(isFavorite)
+
+    const handleLikeClick = async (e) => {
+        if (!state) {
+            openModal(ModalRenterLogin)
+            return
+        }
+
+        try {
+            const response = await axios.post('/api/favorites/toggle', {
+                property_id: home.id,
+            });
+
+            if (response.data.status === 'added') {
+                checkFavoriteStatus()
+                toast.success('Ajouté aux favoris !');
+
+            } else {
+                checkFavoriteStatus()
+                toast.info('Retiré des favoris');
+            }
+        } catch (error) {
+            console.error('Erreur lors de la gestion des favoris:', error);
+            toast.error('Une erreur est survenue');
+        }
+    }
+
     return (
-        <button className="lg:w-[382px] h-[590px] homecard w-[90%] mx-auto flex-grow lg:mx-0 p-1.5 cursor-pointer grid grid-rows-[250px_1fr] gap-[25px] rounded-[10px]" 
+        <Link to={"/detail/"+home.id} className="lg:w-[382px] h-[590px] homecard w-[90%] mx-auto flex-grow lg:mx-0 p-1.5 cursor-pointer grid grid-rows-[250px_1fr] gap-[25px] rounded-[10px]" 
                 style={{boxShadow: "0 0 7px rgba(0, 0, 0, .25)"}}>
             {/* Container image avec hauteur fixe */}
             <div className="img-cont relative -z-20 h-full w-full">
@@ -161,9 +218,9 @@ export function HomeDyn({home}) {
                     className="w-full h-full object-cover rounded-[10px]" 
                     alt={home.property_name} 
                 />
-                <span className="absolute cursor-pointer top-0 right-0 w-[60px] h-[40px] p-2 bg-(--light-green) flex items-center justify-center rounded-tr-[10px] rounded-bl-[10px]">
-                    <i className="fa-solid fa-heart text-xl text-white"></i>
-                </span>
+                <button onClick={handleLikeClick} className="absolute cursor-pointer top-0 right-0 w-[60px] h-[40px] p-2 bg-(--light-green) flex items-center justify-center rounded-tr-[10px] rounded-bl-[10px]">
+                    <i className={`${isFavorite ? 'text-red-300' : 'text-white'}  fa-solid fa-heart text-xl`}></i>
+                </button>
             </div>
 
             {/* Container info avec overflow gestion */}
@@ -215,15 +272,42 @@ export function HomeDyn({home}) {
                     </span>
                 </div>
             </div>
-        </button>
+        </Link>
     );
 }
 
-export function HomeDyn2({home}) {
-    const image = home.images.filter((el) => el.is_main == 1).map(el => el.image_path)
+export function HomeDyn2({home, highlightTags}) {
+    const { state, user } = useAuth();
+    const { openModal } = useModal();
+    const image = home.images.filter((el) => el.is_main == 1).map(el => el.image_path);
+    
+    const handleLikeClick = async (e) => {
+        
+        if (!state) {
+
+            console.log('Bonjour')
+            openModal(ModalRenterLogin)
+            return
+        }
+
+        try {
+            const response = await axios.post('/api/favorites/toggle', {
+                property_id: home.id,
+            });
+
+            if (response.data.status === 'added') {
+                toast.success('Ajouté aux favoris !');
+            } else {
+                toast.info('Retiré des favoris');
+            }
+        } catch (error) {
+            console.error('Erreur lors de la gestion des favoris:', error);
+            toast.error('Une erreur est survenue');
+        }
+    }
 
     return (
-        <button className="lg:w-[382px] max-w-[400px] h-[590px] homecard w-[90%] mx-auto flex-grow lg:mx-0 p-1.5 cursor-pointer grid grid-rows-[250px_1fr] gap-[25px] rounded-[10px]" 
+        <Link to={"/detail"+home.id} className="lg:w-[382px] max-w-[400px] h-[590px] homecard w-[90%] mx-auto flex-grow lg:mx-0 p-1.5 cursor-pointer grid grid-rows-[250px_1fr] gap-[25px] rounded-[10px]" 
                 style={{boxShadow: "0 0 7px rgba(0, 0, 0, .25)"}}>
             {/* Container image avec hauteur fixe */}
             <div className="img-cont relative -z-20 h-full w-full">
@@ -232,9 +316,9 @@ export function HomeDyn2({home}) {
                     className="w-full h-full object-cover rounded-[10px]" 
                     alt={home.property_name} 
                 />
-                <span className="absolute cursor-pointer top-0 right-0 w-[60px] h-[40px] p-2 bg-(--light-green) flex items-center justify-center rounded-tr-[10px] rounded-bl-[10px]">
+                <button  onClick={handleLikeClick} className="absolute cursor-pointer top-0 right-0 w-[60px] h-[40px] p-2 bg-(--light-green) flex items-center justify-center rounded-tr-[10px] rounded-bl-[10px]">
                     <i className="fa-solid fa-heart text-xl text-white"></i>
-                </span>
+                </button>
             </div>
 
             {/* Container info avec overflow gestion */}
@@ -252,8 +336,13 @@ export function HomeDyn2({home}) {
 
                 {/* Tags avec hauteur max */}
                 <div className="flex items-center justify-start flex-wrap gap-2 max-h-[80px] overflow-y-auto">
-                    {home.tags.length > 0 && home.tags.map((el) => (
-                        <HomeTags key={el.id}>{el.tag_name}</HomeTags>
+                    {home.tags.map(tag => (
+                        <HomeTags
+                            key={tag.id}
+                            className={`tag ${highlightTags ? 'highlight' : ''}`}
+                        >
+                            {tag.tag_name}
+                        </HomeTags>
                     ))}
                 </div>
 
@@ -286,7 +375,7 @@ export function HomeDyn2({home}) {
                     </span>
                 </div>
             </div>
-        </button>
+        </Link>
     );
 }
 

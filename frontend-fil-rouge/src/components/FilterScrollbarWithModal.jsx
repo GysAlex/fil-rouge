@@ -1,150 +1,131 @@
-import { useState, useRef, useEffect } from 'react';
-import { ChevronLeft, ChevronRight, SlidersHorizontal, X } from "lucide-react";
+import { useEffect, useRef, useState } from 'react';
+import { useFilter } from '../hooks/useFilter';
+import { AdvancedFilter } from './AdvancedFilter';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
+import axios from 'axios';
 
+export function FilterScrollbarWithModal() {
+    const [availableTags, setAvailableTags] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const { selectedTags, updateTags } = useFilter();
+    const carouselRef = useRef(null);
+    const [scrollPosition, setScrollPosition] = useState(0);
+    const [isAdvancedFilterOpen, setIsAdvancedFilterOpen] = useState(false);
 
-export  function FilterScrollbarWithModal() {
-  const scrollContainerRef = useRef(null);
-  const [showLeftArrow, setShowLeftArrow] = useState(false);
-  const [showRightArrow, setShowRightArrow] = useState(true);
-  const [modalOpen, setModalOpen] = useState(false);
-  const [activeFilter, setActiveFilter] = useState(null);
+    // Récupération des tags depuis l'API
+    useEffect(() => {
+        const fetchTags = async () => {
+            try {
+                const response = await axios.get('/api/property-tags');
+                setAvailableTags(response.data);
+                setLoading(false);
+            } catch (error) {
+                console.error('Erreur lors de la récupération des tags:', error);
+                setLoading(false);
+            }
+        };
+        fetchTags();
+    }, []);
 
-  const filters = [
-    { 
-      id: 1, 
-      label: "Studio meublés",
-      formFields: [
-        { id: "meuble", type: "checkbox", label: "Meublé uniquement" }
-      ]
-    },
-    { 
-      id: 2, 
-      label: "Prix", 
-      formFields: [
-        { id: "minPrice", type: "range", label: "Prix minimum", min: 0, max: 2000, step: 50 },
-        { id: "maxPrice", type: "range", label: "Prix maximum", min: 0, max: 2000, step: 50 }
-      ]
-    },
-    { 
-      id: 3, 
-      label: "Type de logement",
-      formFields: [
-        { id: "studio", type: "checkbox", label: "Studio" },
-        { id: "t1", type: "checkbox", label: "T1" },
-        { id: "t2", type: "checkbox", label: "T2" },
-        { id: "t3", type: "checkbox", label: "T3+" }
-      ]
-    },
-    { 
-      id: 4, 
-      label: "Distance au campus",
-      formFields: [
-        { id: "distance", type: "range", label: "Distance maximale (km)", min: 0, max: 10, step: 0.5 }
-      ]
-    },
-    { 
-      id: 5, 
-      label: "Chambre simple",
-      formFields: [
-        { id: "chambreSimple", type: "checkbox", label: "Chambre simple uniquement" }
-      ]
-    },
-    { id: 6, label: "Colocation" },
-    { id: 7, label: "Appartement" },
-    { id: 8, label: "Autre" }
-  ];
-
-  const scroll = (direction) => {
-    if (scrollContainerRef.current) {
-      const container = scrollContainerRef.current;
-      const scrollAmount = direction === 'left' ? -200 : 200;
-      container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-    }
-  };
-
-  const checkScrollPosition = () => {
-    if (scrollContainerRef.current) {
-      const container = scrollContainerRef.current;
-      setShowLeftArrow(container.scrollLeft > 0);
-      setShowRightArrow(
-        container.scrollLeft < container.scrollWidth - container.clientWidth - 10
-      );
-    }
-  };
-
-
-  const handleFormSubmit = (e) => {
-    e.preventDefault();
-    // Ici vous traiteriez les données du formulaire
-    // Pour l'exemple, affichons simplement les valeurs dans la console
-    const formData = new FormData(e.target);
-    const formValues = Object.fromEntries(formData.entries());
-    console.log("Valeurs du formulaire:", formValues);
-    
-    closeModal();
-  };
-
-  useEffect(() => {
-    const container = scrollContainerRef.current;
-    if (container) {
-      container.addEventListener('scroll', checkScrollPosition);
-      // Initial check
-      checkScrollPosition();
-    }
-    
-    return () => {
-      if (container) {
-        container.removeEventListener('scroll', checkScrollPosition);
-      }
+    const handleTagSelect = (tag) => {
+        updateTags([...selectedTags, tag]);
+        setAvailableTags(prev => prev.filter(t => t.id !== tag.id));
     };
-  }, []);
 
+    const handleTagRemove = (tag) => {
+        updateTags(selectedTags.filter(t => t.id !== tag.id));
+        setAvailableTags(prev => [...prev, tag]);
+    };
+    const scroll = (direction) => {
+      const container = carouselRef.current;
+      const scrollAmount = 200; // Ajustez selon vos besoins
 
+      if (container) {
+          const newPosition = direction === 'left' 
+              ? Math.max(scrollPosition - scrollAmount, 0)
+              : Math.min(scrollPosition + scrollAmount, container.scrollWidth - container.clientWidth);
+          
+          container.scrollTo({
+              left: newPosition,
+              behavior: 'smooth'
+          });
+          setScrollPosition(newPosition);
+      }
+  };
 
   return (
-    <div className="w-full bg-white relative border-b border-gray-200">
-      <div className="flex items-stretch justify-start flex-col px-2 ">
-        <div className="flex items-center gap-3 text-gray-700 p-4">
-          <SlidersHorizontal size={18} />
-          <span className="text-sm font-medium min-w-max text-green-500 ">Trier par</span>
-        </div>
-        
-        {showLeftArrow && (
-          <button 
-            onClick={() => scroll('left')} 
-            className=" overlay absolute left-0 z-10 bg-white shadow-md rounded-full p-2 ml-2 text-green-500 hover:bg-gray-50"
-          >
-            <ChevronLeft size={24} />
-          </button>
-        )}
-        
-        <div 
-          ref={scrollContainerRef}
-          className="flex gap-3 overflow-x-auto scrollbar-hide px-2 py-2 scroll-smooth"
-          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-        >
-          {filters.map((filter) => (
-            <button
-              key={filter.id}
-              onClick={() => openModal(filter)}
-              className="whitespace-nowrap px-4 py-2 rounded-full border text-green-500 border-gray-200 text-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-green-500"
-            >
-              {filter.label}
+      <div className="w-full px-4 mt-[30px]">
+          {/* Tags sélectionnés */}
+          <div className='flex items-center mb-2 justify-between'>
+            <div className='flex items-center gap-2'>
+              <i className="fa-solid fa-filter text-xl text-(--primary-green)"></i>
+              <span>appliquer un filtre</span>
+            </div>
+            <button onClick={()=> setIsAdvancedFilterOpen(true)} className='flex items-center cursor-pointer gap-2 text-[#10B981] hover:text-[#059669] transition-colors'>
+                <i className="fa-solid fa-bars-staggered"></i>
+                 <span>filtre avancé</span>
             </button>
-          ))}
-        </div>
-        
-        {showRightArrow && (
-          <button 
-            onClick={() => scroll('right')} 
-            className="absolute right-0 z-10 bg-white shadow-md rounded-full p-2 mr-2 text-green-500 hover:bg-gray-50"
-          >
-            <ChevronRight size={24} />
-          </button>
-        )}
-      </div>
+            <AdvancedFilter 
+                isOpen={isAdvancedFilterOpen}
+                onClose={() => setIsAdvancedFilterOpen(false)}
+            />
+          </div>
+          <div className="mb-6 flex flex-wrap gap-2">
+              {selectedTags.map(tag => (
+                  <button
+                      key={tag.id}
+                      onClick={() => handleTagRemove(tag)}
+                      className="px-4 py-2 bg-[#10B981] text-white rounded-full 
+                      flex items-center gap-2 hover:bg-[#059669] transition-colors"
+                  >
+                      {tag.tag_name}
+                      <span className="text-sm font-bold">×</span>
+                  </button>
+              ))}
+          </div>
 
-        
-    </div>
+          {/* Carousel personnalisé */}
+          <div className="relative">
+              <button 
+                  onClick={() => scroll('left')}
+                  className="absolute left-0 top-1/2 -translate-y-1/2 z-10
+                  bg-white p-2 rounded-full shadow-md hover:bg-gray-50
+                  disabled:opacity-50 disabled:cursor-not-allowed"
+                  disabled={scrollPosition === 0}
+              >
+                  <ChevronLeft className="w-5 h-5 text-[#10B981]" />
+              </button>
+
+              <div 
+                  ref={carouselRef}
+                  className="overflow-x-hidden scroll-smooth py-2 px-10"
+              >
+                  <div className="flex gap-2">
+                      {availableTags.map(tag => (
+                          <button
+                              key={tag.id}
+                              onClick={() => handleTagSelect(tag)}
+                              className="px-4 py-2 bg-gray-100 hover:bg-gray-200
+                              text-[#374151] rounded-full transition-colors
+                              whitespace-nowrap flex-shrink-0"
+                          >
+                              {tag.tag_name}
+                          </button>
+                      ))}
+                  </div>
+              </div>
+
+              <button 
+                  onClick={() => scroll('right')}
+                  className="absolute right-0 top-1/2 -translate-y-1/2 z-10
+                  bg-white p-2 rounded-full shadow-md hover:bg-gray-50
+                  disabled:opacity-50 disabled:cursor-not-allowed"
+                  disabled={carouselRef.current && 
+                      scrollPosition >= carouselRef.current.scrollWidth - carouselRef.current.clientWidth}
+              >
+                  <ChevronRight className="w-5 h-5 text-[#10B981]" />
+              </button>
+          </div>
+      </div>
   );
 }

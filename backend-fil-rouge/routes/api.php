@@ -16,6 +16,9 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PropertyDetailsController;
 use App\Http\Controllers\PropertyDetailsPublicController;
 use App\Http\Controllers\SearchController;
+use App\Http\Controllers\LikeController;
+use App\Http\Controllers\ContactOwnerController;
+use App\Http\Controllers\NotificationController;
 
 
 
@@ -81,3 +84,18 @@ Route::middleware('auth:sanctum')->group(function () {
 Route::get('/properties/{id}/details', [PropertyDetailsPublicController::class, 'getPropertyDetails']);
 
 Route::get('/properties/search/{university}', [SearchController::class, 'getAllProperties']);
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/favorites/toggle', [LikeController::class, 'toggle']);
+    Route::get('/favorites/status/{propertyId}', [LikeController::class, 'getStatus']);
+    Route::get('/favorites', [LikeController::class, 'getFavorites']);
+});
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/contact-owner', [ContactOwnerController::class, 'contact']);
+});
+
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/notify-prospects', [NotificationController::class, 'notifyProspects']);
+});
