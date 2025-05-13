@@ -209,7 +209,7 @@ export function HomeDyn({home}) {
     }
 
     return (
-        <Link to={"/detail/"+home.id} className="lg:w-[382px] h-[590px] homecard w-[90%] mx-auto flex-grow lg:mx-0 p-1.5 cursor-pointer grid grid-rows-[250px_1fr] gap-[25px] rounded-[10px]" 
+        <div  className="lg:w-[382px] h-[590px] homecard w-[90%] mx-auto flex-grow lg:mx-0 p-1.5 cursor-pointer grid grid-rows-[250px_1fr] gap-[25px] rounded-[10px]" 
                 style={{boxShadow: "0 0 7px rgba(0, 0, 0, .25)"}}>
             {/* Container image avec hauteur fixe */}
             <div className="img-cont relative -z-20 h-full w-full">
@@ -224,7 +224,7 @@ export function HomeDyn({home}) {
             </div>
 
             {/* Container info avec overflow gestion */}
-            <div className="info flex flex-col items-stretch justify-start gap-[15px] overflow-y-auto">
+            <Link to={"/detail/"+home.id} className="info flex flex-col items-stretch justify-start gap-[15px] overflow-y-auto">
                 {/* En-tête avec nom et note */}
                 <div className="infoF flex items-center justify-between min-h-[40px]">
                     <span className="text-[20px] text-(--text-color) font-medium truncate pr-2">
@@ -271,8 +271,8 @@ export function HomeDyn({home}) {
                         {home.property_price} FCFA / ans
                     </span>
                 </div>
-            </div>
-        </Link>
+            </Link>
+        </div>
     );
 }
 
@@ -307,7 +307,7 @@ export function HomeDyn2({home, highlightTags}) {
     }
 
     return (
-        <Link to={"/detail"+home.id} className="lg:w-[382px] max-w-[400px] h-[590px] homecard w-[90%] mx-auto flex-grow lg:mx-0 p-1.5 cursor-pointer grid grid-rows-[250px_1fr] gap-[25px] rounded-[10px]" 
+        <div  className="lg:w-[382px] max-w-[400px] h-[590px] homecard w-[90%] mx-auto flex-grow lg:mx-0 p-1.5 cursor-pointer grid grid-rows-[250px_1fr] gap-[25px] rounded-[10px]" 
                 style={{boxShadow: "0 0 7px rgba(0, 0, 0, .25)"}}>
             {/* Container image avec hauteur fixe */}
             <div className="img-cont relative -z-20 h-full w-full">
@@ -322,7 +322,7 @@ export function HomeDyn2({home, highlightTags}) {
             </div>
 
             {/* Container info avec overflow gestion */}
-            <div className="info flex flex-col items-stretch justify-start gap-[15px] overflow-y-auto">
+            <Link to={"/detail/"+home.id} className="info flex flex-col items-stretch justify-start gap-[15px] overflow-y-auto">
                 {/* En-tête avec nom et note */}
                 <div className="infoF flex items-center justify-between min-h-[40px]">
                     <span className="text-[20px] text-(--text-color) font-medium truncate pr-2">
@@ -374,8 +374,8 @@ export function HomeDyn2({home, highlightTags}) {
                         {home.property_price} FCFA / ans
                     </span>
                 </div>
-            </div>
-        </Link>
+            </Link>
+        </div>
     );
 }
 

@@ -44,7 +44,7 @@ export function Detail()
 
 
     return <>
-        <Link className="p-2.5 h-[44px] w-fit rounded-4xl cursor-pointer text-white bg-(--primary-green) flex items-center justify-center gap-3">
+        <Link to={-1} className="p-2.5 h-[44px] w-fit rounded-4xl cursor-pointer text-white bg-(--primary-green) flex items-center justify-center gap-3">
             <i className="fa-solid fa-arrow-left"></i>
             <span>retour</span>
         </Link>
@@ -162,7 +162,7 @@ export function Detail()
                             <ArrowItem>
                                 <div className="text-(--text-color) w-[70%]" style={{lineHeight: "30px"}}>Possibilité de payer en plusieurs tranches</div>
                             </ArrowItem>
-                               {property.colocation && <ArrowItem>
+                               {property.coloc && <ArrowItem>
                                 <div className="text-(--text-color) w-[70%]" style={{lineHeight: "30px"}}>Opportunité de collocation disponible</div>
                             </ArrowItem>}
                             <ArrowItem>

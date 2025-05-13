@@ -69,5 +69,18 @@ Route::get('/auth/google/owner/callback', [GoogleOwnerHandleController::class, '
 
 Route::get('/test', function () {
 
-    return "EVERYTHING IS OK";
+    Asset::create([
+        'asset_name' => 'sécurité 24/24'
+    ]);
+    Asset::create([
+        'asset_name' => 'espace vert à proximité'
+    ]);
+    Asset::create([
+        'asset_name' => "reserve annual d'eau"
+    ]);
+    Asset::create([
+        'asset_name' => 'plusieurs commerces à proximité'
+    ]);
+
+
  });
