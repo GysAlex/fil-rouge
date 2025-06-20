@@ -1,7 +1,7 @@
 
-# Application de rechercher et de gestion de logements universitaires
+# Application de recherche et de gestion de logements universitaires
 
-Il s'agit d'une application de mise en relation entre des étudiants(cible principales) ou de toutes autres personnes intéresés en contact avec des propritiétaires de logements universitaires
+Il s'agit d'une application de mise en relation entre des étudiants(cible principales) ou de toutes autres personnes intéressés en contact avec des propritiétaires de logements universitaires
 
 
 
